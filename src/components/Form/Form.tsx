@@ -2,7 +2,7 @@ import { useState, FormEvent } from 'react';
 
 import Input, { inputOptions, ChangeHandler } from 'components/Form/Input';
 
-type SubmitFn = (inputItems: {}) => void | boolean | Promise<boolean | undefined>;
+type SubmitFn = (inputItems: Record<string, string>) => void | boolean | Promise<boolean | undefined>;
 
 const Form = ({
   submitFn,
@@ -17,8 +17,8 @@ const Form = ({
     inputOptions?: inputOptions
   ][];
 }) => {
-  const defaultItems = inputItems.reduce((
-    dict: { [name: string]: string; }, item
+  const defaultItems = inputItems.reduce<Record<string, string>>((
+    dict, item
   ) => {
     dict[item[0]] = item[2]?.defaultValue || '';
     return dict;
@@ -28,7 +28,6 @@ const Form = ({
 
   const changeHandler: ChangeHandler = (e) => {
     const { name, value } = e.target;
-    console.log(value);
 
     setInput({
       ...input,

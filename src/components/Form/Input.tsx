@@ -6,6 +6,7 @@ export interface inputOptions {
   defaultValue?: string,
   required?: boolean;
   readOnly?: boolean;
+  [attr: string]: any;
 }
 
 export type ChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
