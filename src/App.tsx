@@ -1,5 +1,7 @@
-import 'App.css';
+
 import { Switch, Route } from "react-router-dom";
+
+import { addCollection } from 'utils/firebase';
 
 import Header from 'pages/Header';
 import Homepage from 'pages/Homepage';
