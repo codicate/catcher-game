@@ -1,11 +1,13 @@
-import { FormEvent, useState } from 'react';
+import { useState, FormEvent } from 'react';
 
 import Input, { inputOptions, ChangeHandler } from 'components/Form/Input';
 
 type SubmitFn = (inputItems: {}) => void | boolean | Promise<boolean | undefined>;
 
 const Form = ({
-  submitFn, children, inputItems
+  submitFn,
+  children,
+  inputItems
 }: {
   submitFn?: SubmitFn;
   children?: React.ReactNode;
@@ -26,6 +28,7 @@ const Form = ({
 
   const changeHandler: ChangeHandler = (e) => {
     const { name, value } = e.target;
+    console.log(value);
 
     setInput({
       ...input,

@@ -1,4 +1,5 @@
 import styles from 'components/Form/Input.module.scss';
+import { createElement } from 'react';
 
 export interface inputOptions {
   option?: 'input' | 'textarea';
@@ -28,29 +29,20 @@ const Input = ({
 
 } & inputOptions
 ) => {
+  const properties = {
+    className: (option === 'textarea') ? styles.textarea : styles.input,
+    onChange: changeHandler,
+    ...(readOnly ? { defaultValue: value, readOnly: true } : { value: value }),
+    ...props
+  };
+
   return (
     <div className={styles.group}>
-      {(
-        option === 'textarea'
-      ) ? (
-        <textarea
-          className={styles.textarea}
-          onChange={changeHandler}
-          {...(readOnly ? { defaultValue: value } : { value: value })}
-          {...props}
-        />
-      ) : (
-        <input
-          className={styles.input}
-          onChange={changeHandler}
-          {...(readOnly ? { defaultValue: value } : { value: value })}
-          {...props}
-        />
-      )}
+      { createElement(option || 'input', { ...properties })}
       {
         label && (
           <label
-            className={`${defaultValue ? styles.shrink : ''}`}
+            className={`${value ? styles.shrink : ''}`}
           >
             {label}
           </label>

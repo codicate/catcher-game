@@ -8,10 +8,10 @@ const Header = () => {
       </button>
       <Form
         submitFn={() => {
-
+          return true;
         }}
         inputItems={[
-          
+          ['join', 'Join Room', { type: 'number' }]
         ]}
       />
     </div>
