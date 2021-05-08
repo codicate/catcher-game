@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/catcher-game/static/css/main.efc1a5e6.chunk.css",
+    "main.js": "/catcher-game/static/js/main.c87c3b66.chunk.js",
+    "main.js.map": "/catcher-game/static/js/main.c87c3b66.chunk.js.map",
+    "runtime-main.js": "/catcher-game/static/js/runtime-main.1281cddd.js",
+    "runtime-main.js.map": "/catcher-game/static/js/runtime-main.1281cddd.js.map",
+    "static/js/2.9efd2612.chunk.js": "/catcher-game/static/js/2.9efd2612.chunk.js",
+    "static/js/2.9efd2612.chunk.js.map": "/catcher-game/static/js/2.9efd2612.chunk.js.map",
+    "index.html": "/catcher-game/index.html",
+    "static/css/main.efc1a5e6.chunk.css.map": "/catcher-game/static/css/main.efc1a5e6.chunk.css.map",
+    "static/js/2.9efd2612.chunk.js.LICENSE.txt": "/catcher-game/static/js/2.9efd2612.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1281cddd.js",
+    "static/js/2.9efd2612.chunk.js",
+    "static/css/main.efc1a5e6.chunk.css",
+    "static/js/main.c87c3b66.chunk.js"
+  ]
+}
