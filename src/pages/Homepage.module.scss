@@ -1,0 +1,45 @@
+@import "/src/styles/variables";
+
+#homepage {
+  display: grid;
+  grid-template: 1fr 1fr / 1fr;
+
+  @media (orientation: landscape) {
+    grid-template: 1fr / 1fr 1fr;
+  }
+
+  a {
+    display: grid;
+    place-items: center;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 0 0 0.25rem black;
+
+    transition: 0.3s;
+  }
+
+  a:focus,
+  a:hover {
+    font-size: 2.2rem;
+    text-shadow: 0 0 0.25rem white;
+  }
+
+  #join {
+    background-color: $red;
+
+    &:focus,
+    &:hover {
+      background-color: $red-lighten;
+    }
+  }
+
+  #create {
+    background-color: $blue;
+
+    &:focus,
+    &:hover {
+      background-color: $blue-lighten;
+    }
+  }
+}

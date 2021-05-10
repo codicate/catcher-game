@@ -1,0 +1,23 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  &>:last-child {
+    height: 100vh;
+    width: 100vw;
+  }
+}
+
+a,
+button {
+  font-family: inherit;
+  color: inherit;
+
+  text-decoration: none;
+  cursor: pointer;
+}

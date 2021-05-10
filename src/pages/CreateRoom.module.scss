@@ -1,0 +1,38 @@
+@import "/src/styles/variables";
+
+#create {
+  display: grid;
+  place-items: center;
+
+  background-color: $blue;
+
+  form {
+    position: relative;
+    display: flex;
+    flex-flow: column;
+
+    border-radius: 1rem;
+    padding: .5rem;
+
+    overflow: hidden;
+
+    &::after {
+      content: '';
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+
+      pointer-events: none;
+      border-radius: 1rem;
+      border: .5rem solid white;
+      box-shadow: inset 0 0 .5rem hsl(0, 0%, 20%);
+    }
+  }
+
+  #roomId {
+
+  }
+}

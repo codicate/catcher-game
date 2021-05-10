@@ -1,11 +1,13 @@
 import styles from 'components/Form/Input.module.scss';
+import { useRef } from 'react';
 
-export interface inputOptions {
+export interface InputOptions {
   option?: 'input' | 'textarea';
   type?: string,
   defaultValue?: string,
   required?: boolean;
   readOnly?: boolean;
+  selectAllOnFocus?: boolean;
   [attr: string]: any;
 }
 
@@ -18,37 +20,36 @@ const Input = ({
   value,
   option,
   readOnly,
+  selectAllOnFocus,
   ...props
-
 }: {
-
   changeHandler?: ChangeHandler;
   name?: string;
   label?: string;
   value: string;
-
-} & inputOptions
+} & InputOptions
 ) => {
   const InputOrTextarea = option || 'input';
+  const inputRef = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
 
   return (
-    <div className={styles.group}>
-      <InputOrTextarea
-        className={(option === 'textarea') ? styles.textarea : styles.input}
-        onChange={changeHandler}
-        {...(readOnly ? { defaultValue: value, readOnly: true } : { value: value })}
-        {...props}
-      />
-      {
-        label && (
-          <label
-            className={`${value ? styles.shrink : ''}`}
-          >
-            {label}
-          </label>
-        )
+    <InputOrTextarea
+      ref={inputRef}
+      className={(
+        option === 'textarea'
+      ) ? styles.textarea
+        : styles.input
       }
-    </div>
+      onChange={changeHandler}
+      {...((selectAllOnFocus)
+        && { onFocus: () => inputRef.current?.select() }
+      )}
+      {...((readOnly)
+        ? { defaultValue: value, readOnly: true }
+        : { value: value }
+      )}
+      {...props}
+    />
   );
 };
 
