@@ -3,6 +3,7 @@ import { createSlice, createDraftSafeSelector, PayloadAction, createAsyncThunk }
 
 import { firestore } from 'utils/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { error } from 'console';
 
 
 enum Status { dead, alive }
@@ -76,18 +77,14 @@ export const joinRoom = createAsyncThunk(
       const roomDoc = doc(firestore, 'rooms', input.roomId);
       const roomSnapshot = await getDoc(roomDoc);
 
-      if (!roomSnapshot.exists()) {
-        alert('Room not Found');
-        return initialState;
-      }
+      if (!roomSnapshot.exists())
+        throw new Error('Room not Found');
 
       const roomData = roomSnapshot.data() as Room;
       console.log("Room data:", roomData);
 
-      if (roomData.players.length >= 8) {
-        alert('Room Full');
-        return initialState;
-      }
+      if (roomData.players.length >= 8)
+        throw new Error('Room Full');
 
       await setDoc(roomDoc, {
         ...roomData,
@@ -101,6 +98,7 @@ export const joinRoom = createAsyncThunk(
 
     } catch (err) {
       console.error(err);
+      alert(err);
       return rejectWithValue(err.response.data);
     }
   }

@@ -17,8 +17,10 @@ const JoinRoom = () => {
       <Form
         id={styles.form}
         submitFn={async (input) => {
-          dispatch(joinRoom(input));
-          history.push('/lobby');
+          const joinPayload = await dispatch(joinRoom(input));
+
+          if (joinPayload.meta.requestStatus === 'fulfilled')
+            history.push('/lobby');
         }}
         inputItems={{
           roomId: {
