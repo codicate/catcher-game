@@ -35,6 +35,7 @@ const getCodeFromDate = (numOfDigit: number) => {
 
 export const createRoom = createAsyncThunk(
   'room/createRoom',
+
   async (input: {
     roomName: string;
     name: string;
@@ -66,6 +67,7 @@ export const createRoom = createAsyncThunk(
 
 export const joinRoom = createAsyncThunk(
   'room/joinRoom',
+
   async (input: {
     roomId: string;
     playerName: string;
@@ -74,23 +76,29 @@ export const joinRoom = createAsyncThunk(
       const roomDoc = doc(firestore, 'rooms', input.roomId);
       const roomSnapshot = await getDoc(roomDoc);
 
-      if (roomSnapshot.exists()) {
-        const roomData = roomSnapshot.data() as Room;
-        console.log("Room data:", roomData);
-
-        await setDoc(roomDoc, {
-          ...roomData,
-          players: roomData.players.concat({
-            name: input.playerName,
-            status: Status.alive,
-          })
-        });
-
-        return roomData;
-      } else {
+      if (!roomSnapshot.exists()) {
         alert('Room not Found');
         return initialState;
       }
+
+      const roomData = roomSnapshot.data() as Room;
+      console.log("Room data:", roomData);
+
+      if (roomData.players.length >= 8) {
+        alert('Room Full');
+        return initialState;
+      }
+
+      await setDoc(roomDoc, {
+        ...roomData,
+        players: roomData.players.concat({
+          name: input.playerName,
+          status: Status.alive,
+        })
+      });
+
+      return roomData;
+
     } catch (err) {
       console.error(err);
       return rejectWithValue(err.response.data);
