@@ -1,0 +1,59 @@
+@import "/src/styles/variables";
+
+@keyframes colorChange {
+  0% {
+    background-color: $red-lighten;
+  }
+
+  25% {
+    background-color: $blue-lighten;
+  }
+
+  50% {
+    background-color: $green-lighten;
+  }
+
+  75% {
+    background-color: $yellow-lighten;
+  }
+
+  100% {
+    background-color: $red-lighten;
+  }
+}
+
+#lobby {
+  display: grid;
+  place-items: center;
+
+  background-color: $yellow;
+
+  animation: colorChange infinite 10s ease-in-out;
+
+  &:hover {
+    background-color: $red;
+  }
+
+  #roomId {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 1em 1.5em;
+
+    border: none;
+    border-radius: 1em;
+    background: hsl(0, 0%, 10%);
+
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+
+    transition: 0.1s ease-out;
+
+    &:active {
+      padding: 0.875em 1.3125em;
+      font-size: 1.75rem;
+    }
+  }
+}

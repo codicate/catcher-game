@@ -14,15 +14,15 @@
     color: white;
     font-size: 2rem;
     font-weight: bold;
-    text-shadow: 0 0 0.25rem black;
+    text-shadow: 0 0 0.25em black;
 
-    transition: 0.3s;
+    transition: 0.3s ease-out;
   }
 
   a:focus,
   a:hover {
     font-size: 2.2rem;
-    text-shadow: 0 0 0.25rem white;
+    text-shadow: 0 0 0.25em white;
   }
 
   #join {

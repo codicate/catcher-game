@@ -11,8 +11,8 @@
     display: flex;
     flex-flow: column;
 
-    border-radius: 1rem;
-    padding: .5rem;
+    border-radius: 1em;
+    padding: .5em;
 
     overflow: hidden;
 
@@ -26,13 +26,11 @@
       width: 100%;
 
       pointer-events: none;
-      border-radius: 1rem;
-      border: .5rem solid white;
-      box-shadow: inset 0 0 .5rem hsl(0, 0%, 20%);
+      border-radius: 1em;
+      border: .5em solid white;
+      box-shadow: inset 0 0 .5em hsl(0, 0%, 20%);
     }
   }
 
-  #roomId {
-
-  }
+  #roomId {}
 }

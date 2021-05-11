@@ -3,18 +3,18 @@ $main-color: black;
 
 input,
 textarea {
-  padding: 1rem 3rem;
+  padding: 1em 3em;
   text-align: center;
   background: hsl(0, 0%, 80%);
   color: $sub-color;
-  font-size: 1.5rem;
+  font-size: 1.5em;
   display: block;
-  width: 16rem;
+  width: 12em;
   border: none;
   border-radius: 0;
 
   &:not(:last-of-type) {
-    border-bottom: 4px solid hsl(0, 0%, 70%);
+    border-bottom: .25em solid hsl(0, 0%, 70%);
   }
 
   &:focus {
