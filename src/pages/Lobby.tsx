@@ -1,12 +1,13 @@
-import { useContext } from 'react';
-import { Context } from 'App';
+
+import { useAppSelector } from 'app/hooks';
+import { selectRoomInfo } from 'app/roomSlice';
 
 const Lobby = () => {
-  const { roomId } = useContext(Context);
-
+  const roomInfo = useAppSelector(selectRoomInfo);
+  console.log('roomInfo', roomInfo);
   return (
     <div>
-      <p>{roomId}</p>
+      <p>{roomInfo.roomId}</p>
     </div>
   );
 };

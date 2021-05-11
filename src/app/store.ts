@@ -1,7 +1,10 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 
+import roomSlice from 'app/roomSlice';
+
 export const store = configureStore({
   reducer: {
+    room: roomSlice,
   },
 });
 

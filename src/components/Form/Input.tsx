@@ -2,13 +2,15 @@ import styles from 'components/Form/Input.module.scss';
 import { useRef } from 'react';
 
 export interface InputOptions {
-  option?: 'input' | 'textarea';
   type?: string,
-  defaultValue?: string,
-  required?: boolean;
+  placeholder?: string;
   readOnly?: boolean;
+  required?: boolean;
+
+  option?: 'input' | 'textarea';
+  label?: string;
+  defaultValue?: string,
   selectAllOnFocus?: boolean;
-  [attr: string]: any;
 }
 
 export type ChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -33,23 +35,33 @@ const Input = ({
   const inputRef = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
 
   return (
-    <InputOrTextarea
-      ref={inputRef}
-      className={(
-        option === 'textarea'
-      ) ? styles.textarea
-        : styles.input
+    <div className={styles.group}>
+      <InputOrTextarea
+        ref={inputRef}
+        className={(
+          option === 'textarea'
+        ) ? styles.textarea
+          : styles.input
+        }
+        onChange={changeHandler}
+        {...((selectAllOnFocus)
+          && { onFocus: () => inputRef.current?.select() }
+        )}
+        {...((readOnly)
+          && { readOnly: true }
+        )}
+        {...props}
+      />
+      {
+        label && (
+          <label
+            className={`${value ? styles.shrink : ''}`}
+          >
+            {label}
+          </label>
+        )
       }
-      onChange={changeHandler}
-      {...((selectAllOnFocus)
-        && { onFocus: () => inputRef.current?.select() }
-      )}
-      {...((readOnly)
-        ? { defaultValue: value, readOnly: true }
-        : { value: value }
-      )}
-      {...props}
-    />
+    </div>
   );
 };
 
