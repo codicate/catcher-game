@@ -22,6 +22,19 @@
   }
 }
 
+@mixin tooltip {
+  position: absolute;
+  bottom: -4em;
+  padding: .75em;
+  width: 10em;
+
+  font-size: .825rem;
+
+  color: $black;
+  border-radius: 1em;
+  background-color: white;
+}
+
 #lobby {
   display: grid;
   place-items: center;
@@ -40,7 +53,7 @@
     justify-content: center;
     align-items: center;
 
-    padding: 1em 1.5em;
+    padding: .75em 1.5em;
 
     border: none;
     border-radius: 1em;
@@ -52,22 +65,18 @@
 
     transition: 0.1s ease-out;
 
+    gap: 1em;
+
+    #gap {
+      height: 1.75em;
+      width: .25em;
+      border-radius: 999rem;
+      background-color: hsl(0, 0%, 25%);
+    }
+
     &:active {
       padding: 0.875em 1.3125em;
       font-size: 1.75rem;
-    }
-
-    @mixin tooltip {
-      position: absolute;
-      bottom: -4em;
-      padding: .75em;
-      width: 10em;
-
-      font-size: .825rem;
-
-      color: $black;
-      border-radius: 1em;
-      background-color: white;
     }
 
     &:hover::after {

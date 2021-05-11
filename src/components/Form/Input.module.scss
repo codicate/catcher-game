@@ -1,5 +1,4 @@
-$sub-color: grey;
-$main-color: black;
+@import "/src/styles/variables";
 
 .group {
 
@@ -7,8 +6,8 @@ $main-color: black;
   textarea {
     padding: 1em 2em;
     text-align: center;
-    background: hsl(0, 0%, 80%);
-    color: $sub-color;
+    background: $grey-lighten;
+    color: grey;
     font-size: 1.25em;
     display: block;
     width: 12em;
@@ -17,7 +16,7 @@ $main-color: black;
   }
 
   &:not(:last-of-type) {
-    border-bottom: .25em solid hsl(0, 0%, 70%);
+    border-bottom: .25em solid $grey;
   }
 
   &:focus {

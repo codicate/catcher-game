@@ -13,8 +13,14 @@ const Lobby = () => {
         onClick={async () => {
           await navigator.clipboard.writeText(roomInfo.roomId);
         }}
+        onMouseLeave={(e)=> {
+            (e.target as HTMLButtonElement).blur();
+          }
+        }
       >
-        {roomInfo.roomId}
+        <span>{roomInfo.roomName}</span>
+        <span id={styles.gap}></span>
+        <span>{roomInfo.roomId}</span>
       </button>
     </div>
   );
