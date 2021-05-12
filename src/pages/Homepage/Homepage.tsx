@@ -1,4 +1,4 @@
-import styles from 'pages/Homepage.module.scss';
+import styles from 'pages/Homepage/Homepage.module.scss';
 import { Link } from 'react-router-dom';
 
 const Homepage = () => {

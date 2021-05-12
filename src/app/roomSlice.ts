@@ -3,17 +3,16 @@ import { createSlice, createDraftSafeSelector, PayloadAction, createAsyncThunk }
 
 import { firestore } from 'utils/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { error } from 'console';
 
 
-enum Status { dead, alive }
+export enum Status { dead, alive }
 
-interface Player {
+export interface Player {
   name: string,
   status: Status,
 }
 
-interface Room {
+export interface Room {
   roomInfo: {
     roomName: string;
     roomId: string;
@@ -83,7 +82,7 @@ export const joinRoom = createAsyncThunk(
       const roomData = roomSnapshot.data() as Room;
       console.log("Room data:", roomData);
 
-      if (roomData.players.length >= 8)
+      if (roomData.players.length >= 1000)
         throw new Error('Room Full');
 
       await setDoc(roomDoc, {
@@ -114,11 +113,13 @@ const roomSlice = createSlice({
       createRoom.fulfilled,
       (state, action) => {
         state.roomInfo = action.payload.roomInfo;
+        state.players = action.payload.players;
       }
     ).addCase(
       joinRoom.fulfilled,
       (state, action) => {
         state.roomInfo = action.payload.roomInfo;
+        state.players = action.payload.players;
       }
     );
   }

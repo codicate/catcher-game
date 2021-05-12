@@ -1,4 +1,4 @@
-import styles from 'pages/JoinRoom.module.scss';
+import styles from 'pages/JoinRoom/JoinRoom.module.scss';
 import { useHistory } from 'react-router-dom';
 
 import { useAppDispatch } from 'app/hooks';

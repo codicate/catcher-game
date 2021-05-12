@@ -1,4 +1,4 @@
-import styles from 'pages/CreateRoom.module.scss';
+import styles from 'pages/CreateRoom/CreateRoom.module.scss';
 import { useHistory } from 'react-router-dom';
 
 import { useAppDispatch } from 'app/hooks';

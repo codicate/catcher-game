@@ -2,11 +2,11 @@
 import 'App.scss';
 import { Switch, Route } from "react-router-dom";
 
-import Header from 'pages/Header';
-import Homepage from 'pages/Homepage';
-import JoinRoom from 'pages/JoinRoom';
-import CreateRoom from 'pages/CreateRoom';
-import Lobby from 'pages/Lobby';
+import Header from 'pages/Header/Header';
+import Homepage from 'pages/Homepage/Homepage';
+import JoinRoom from 'pages/JoinRoom/JoinRoom';
+import CreateRoom from 'pages/CreateRoom/CreateRoom';
+import Lobby from 'pages/Lobby/Lobby';
 
 
 function App() {

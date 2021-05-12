@@ -1,0 +1,55 @@
+@import "/src/styles/variables";
+
+#player {
+  display: flex;
+  align-items: center;
+
+  height: 5em;
+  width: 20em;
+
+  margin: .75em clamp(1.25em, 4vw, 6em);
+
+  border-radius: 5000em;
+  border: .25em solid $black-lighten;
+  background-color: $grey-lighten;
+
+  img {
+    height: 5rem;
+    width: 5rem;
+
+    border-radius: 50%;
+    border: .25em solid $black-lighten;
+  }
+
+  div {
+    font-size: 1.25rem;
+    line-height: 1.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &:nth-of-type(odd) {
+    div {
+      padding-left: 1em;
+      padding-right: 2em;
+    }
+
+    img {
+      border-left: none;
+    }
+  }
+
+  &:nth-of-type(even) {
+    flex-flow: row-reverse;
+
+    div {
+      padding-left: 2em;
+      padding-right: 1em;
+    }
+
+    img {
+      border-right: none;
+    }
+  }
+}
