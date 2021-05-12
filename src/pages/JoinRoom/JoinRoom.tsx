@@ -13,9 +13,9 @@ const JoinRoom = () => {
   const history = useHistory();
 
   return (
-    <div id={styles.join}>
+    <div className={styles.join}>
       <Form
-        id={styles.form}
+        className={styles.form}
         submitFn={async (input) => {
           const joinPayload = await dispatch(joinRoom(input));
 
@@ -28,7 +28,7 @@ const JoinRoom = () => {
             pattern: '\\d{6}',
             title: '6 numeric digits',
             selectAllOnFocus: true,
-            placeholder: 'Room ID',
+            placeholder: 'Room className',
             required: true,
           },
           playerName: {

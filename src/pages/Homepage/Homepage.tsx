@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 const Homepage = () => {
 
   return (
-    <div id={styles.homepage}>
-      <Link id={styles.join} to='/join'>
+    <div className={styles.homepage}>
+      <Link className={styles.join} to='/join'>
         Join Room
       </Link>
-      <Link id={styles.create} to='/create'>
+      <Link className={styles.create} to='/create'>
         Create Room
       </Link>
     </div >

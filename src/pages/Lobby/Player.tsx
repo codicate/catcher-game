@@ -2,7 +2,6 @@ import styles from 'pages/Lobby/Player.module.scss';
 import { Player } from 'app/roomSlice';
 
 function PlayerDiv({
-  idx,
   img,
   player,
 }: {
@@ -11,10 +10,18 @@ function PlayerDiv({
   player: Player;
 }) {
   return (
-    <div id={styles.player}>
+    <div
+      className={`
+      ${styles.player}
+      ${!player ? styles.movingStripe : ''}
+    `}
+      onClick={() => {
+        
+      }}
+    >
       <img src={img} alt="" />
       <div>
-        {player.name}
+        {player?.name || 'Choose me'}
       </div>
     </div>
   );

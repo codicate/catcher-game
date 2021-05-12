@@ -1,6 +1,6 @@
 @import "/src/styles/variables";
 
-#create {
+.create {
   display: grid;
   place-items: center;
 
@@ -31,6 +31,4 @@
       box-shadow: inset 0 0 .5em hsl(0, 0%, 20%);
     }
   }
-
-  #roomId {}
 }

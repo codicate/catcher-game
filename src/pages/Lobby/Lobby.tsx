@@ -11,9 +11,9 @@ const Lobby = () => {
   const players = useAppSelector(selectPlayers);
 
   return (
-    <div id={styles.lobby}>
+    <div className={styles.lobby}>
       <button
-        id={styles.roomId}
+        className={styles.roomId}
         onClick={async () => {
           await navigator.clipboard.writeText(roomInfo.roomId);
         }}
@@ -23,10 +23,10 @@ const Lobby = () => {
         }
       >
         <span>{roomInfo.roomName}</span>
-        <span id={styles.gap}></span>
+        <span className={styles.gap}></span>
         <span>{roomInfo.roomId}</span>
       </button>
-      <div id={styles.board}>
+      <div className={styles.board}>
         {
           characterImgs.map((img, idx) =>
             <Player

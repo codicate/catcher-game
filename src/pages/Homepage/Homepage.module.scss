@@ -1,6 +1,6 @@
 @import "/src/styles/variables";
 
-#homepage {
+.homepage {
   display: grid;
   grid-template: 1fr 1fr / 1fr;
 
@@ -25,7 +25,7 @@
     text-shadow: 0 0 0.25em white;
   }
 
-  #join {
+  .join {
     background-color: $red;
 
     &:focus,
@@ -34,7 +34,7 @@
     }
   }
 
-  #create {
+  .create {
     background-color: $blue;
 
     &:focus,

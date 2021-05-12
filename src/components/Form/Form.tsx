@@ -5,12 +5,12 @@ import Input, { InputOptions, ChangeHandler } from 'components/Form/Input';
 function Form<
   T extends { [name: string]: InputOptions; }
 >({
-  id,
+  className,
   submitFn,
   children,
   inputItems
 }: {
-  id?: string;
+  className?: string;
   submitFn?: (inputItems: Record<keyof T, string>) => void | boolean | Promise<boolean | void>;
   children?: React.ReactNode;
   inputItems: T;
@@ -45,7 +45,7 @@ function Form<
 
   return (
     <form
-      id={id}
+      className={className}
       onSubmit={submitHandler}
     >
       {

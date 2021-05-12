@@ -13,7 +13,7 @@ const CreateRoom = () => {
   const history = useHistory();
 
   return (
-    <div id={styles.create}>
+    <div className={styles.create}>
       <Form
         submitFn={async (input) => {
           dispatch(createRoom(input));
@@ -27,7 +27,7 @@ const CreateRoom = () => {
             placeholder: 'Room Name',
             required: true,
           },
-          name: {
+          playerName: {
             selectAllOnFocus: true,
             placeholder: 'Your Name',
             required: true,

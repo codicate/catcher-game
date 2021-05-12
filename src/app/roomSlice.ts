@@ -1,5 +1,5 @@
 import { RootState } from 'app/store';
-import { createSlice, createDraftSafeSelector, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createDraftSafeSelector, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { firestore } from 'utils/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -16,7 +16,8 @@ export interface Room {
   roomInfo: {
     roomName: string;
     roomId: string;
-  },
+  };
+  self: Player;
   players: Player[];
 }
 
@@ -24,6 +25,10 @@ const initialState: Room = {
   roomInfo: {
     roomName: '',
     roomId: '',
+  },
+  self: {
+    name: '',
+    status: Status.alive
   },
   players: []
 };
@@ -37,9 +42,11 @@ export const createRoom = createAsyncThunk(
   'room/createRoom',
 
   async (input: {
+    playerName: string;
     roomName: string;
-    name: string;
-  }, { rejectWithValue }) => {
+  }, {
+    rejectWithValue
+  }) => {
     const roomId = getCodeFromDate(6);
 
     const roomData = {
@@ -48,7 +55,7 @@ export const createRoom = createAsyncThunk(
         roomName: input.roomName || `Room ${roomId}`,
       },
       players: [{
-        name: input.name,
+        name: input.playerName,
         status: Status.alive,
       }]
     };
