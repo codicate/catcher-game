@@ -11,7 +11,18 @@
 
   border-radius: 5000em;
   border: .25em solid $black-lighten;
-  background-color: $grey-lighten;
+
+  background-color: white;
+  background: repeating-linear-gradient(-45deg, $grey-lighten, $grey-lighten, 20px, white 5px, white 40px);
+  background-size: 21.125em;
+
+  @keyframes movingStripe {
+    to {
+      background-position: 21.125em;
+    }
+  }
+
+  animation: movingStripe 2.5s infinite linear;
 
   img {
     height: 5rem;
