@@ -19,8 +19,7 @@ const Lobby = () => {
         }}
         onMouseLeave={(e) => {
           (e.target as HTMLButtonElement).blur();
-        }
-        }
+        }}
       >
         <span>{roomInfo.roomName}</span>
         <span className={styles.gap}></span>
@@ -28,12 +27,12 @@ const Lobby = () => {
       </button>
       <div className={styles.board}>
         {
-          characterImgs.map((img, idx) =>
+          Object.entries(players).map(([character, player], idx) =>
             <Player
               key={idx}
               idx={idx}
-              img={img}
-              player={players[idx]}
+              character={character}
+              player={players[character]}
             />
           )
         }

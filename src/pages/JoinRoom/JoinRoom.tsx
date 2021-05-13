@@ -28,7 +28,7 @@ const JoinRoom = () => {
             pattern: '\\d{6}',
             title: '6 numeric digits',
             selectAllOnFocus: true,
-            placeholder: 'Room className',
+            placeholder: 'Room ID',
             required: true,
           },
           playerName: {

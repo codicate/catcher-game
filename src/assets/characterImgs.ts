@@ -1,21 +1,21 @@
-import characterImg0 from 'assets/character0.png';
-import characterImg1 from 'assets/character1.png';
-import characterImg2 from 'assets/character2.png';
-import characterImg3 from 'assets/character3.png';
-import characterImg4 from 'assets/character4.png';
-import characterImg5 from 'assets/character5.png';
-import characterImg6 from 'assets/character6.png';
-import characterImg7 from 'assets/character7.png';
+import Ackley from 'assets/Ackley.png';
+import Allie from 'assets/Allie.png';
+import DB from 'assets/DB.png';
+import Holden from 'assets/Holden.png';
+import Jane from 'assets/Jane.png';
+import Phoebe from 'assets/Phoebe.png';
+import Sally from 'assets/Sally.png';
+import Stradlater from 'assets/Stradlater.png';
 
-const characterImgs = [
-  characterImg0,
-  characterImg1,
-  characterImg2,
-  characterImg3,
-  characterImg4,
-  characterImg5,
-  characterImg6,
-  characterImg7
-];
+const characterImgs = {
+  Ackley,
+  Allie,
+  DB,
+  Holden,
+  Jane,
+  Phoebe,
+  Sally,
+  Stradlater
+};
 
 export default characterImgs;
