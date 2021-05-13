@@ -10,7 +10,6 @@ import Lobby from 'pages/Lobby/Lobby';
 
 
 function App() {
-
   return (
     <>
       <Switch>

@@ -1,14 +1,43 @@
 import styles from 'pages/Lobby/Lobby.module.scss';
+import { useEffect, useState } from 'react';
 
-import { useAppSelector } from 'app/hooks';
-import { selectRoomInfo, selectPlayers } from 'app/roomSlice';
+import { firestore } from 'utils/firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
 
-import characterImgs from 'assets/characterImgs';
-import Player from 'pages/Lobby/Player';
+import { useAppSelector, useAppDispatch } from 'app/hooks';
+import {
+  updateLocalState, DatabaseState, setCharacter, Player,
+  selectRoomInfo, selectPlayers,
+
+} from 'app/roomSlice';
+
+import PlayerDiv from 'pages/Lobby/PlayerDiv';
+
 
 const Lobby = () => {
+  const dispatch = useAppDispatch();
+
   const roomInfo = useAppSelector(selectRoomInfo);
   const players = useAppSelector(selectPlayers);
+
+  useEffect(() => {
+    const roomDoc = doc(firestore, 'rooms', roomInfo.roomId);
+
+    const unsubSnapshot = onSnapshot(roomDoc, (doc) => {
+      dispatch(updateLocalState(doc.data() as DatabaseState));
+    });
+
+    return () => unsubSnapshot();
+  }, [dispatch, roomInfo]);
+
+  const [chosenCharacter, setChosenCharacter] = useState(false);
+
+  const chooseCharacter = (character: string, player: Player) => {
+    if (!chosenCharacter && !player?.playerName) {
+      dispatch(setCharacter(character));
+      setChosenCharacter(true);
+    }
+  };
 
   return (
     <div className={styles.lobby}>
@@ -27,12 +56,13 @@ const Lobby = () => {
       </button>
       <div className={styles.board}>
         {
-          Object.entries(players).map(([character, player], idx) =>
-            <Player
+          Object.entries(players).sort().map(([character, player], idx) =>
+            <PlayerDiv
               key={idx}
               idx={idx}
+              chooseCharacter={chooseCharacter}
               character={character}
-              player={players[character]}
+              player={player}
             />
           )
         }

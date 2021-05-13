@@ -1,8 +1,8 @@
 import { RootState } from 'app/store';
-import { createSlice, createDraftSafeSelector, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createDraftSafeSelector, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 import { firestore } from 'utils/firebase';
-import { collectionGroup, doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 
 
 export enum Status { dead, alive }
@@ -33,6 +33,9 @@ const initialState = {
   )
 };
 
+export type LocalState = typeof initialState;
+export type DatabaseState = Omit<typeof initialState, 'self'>;
+
 
 const getCodeFromDate = (numOfDigit: number) => {
   return new Date().getTime().toString().slice(-numOfDigit);
@@ -59,7 +62,10 @@ export const createRoom = createAsyncThunk(
     try {
       const roomDoc = doc(firestore, 'rooms', roomId);
       await setDoc(roomDoc, roomData);
-      return roomData;
+      return {
+        ...roomData,
+        playerName: input.playerName
+      };
 
     } catch (err) {
       console.error(err);
@@ -81,15 +87,18 @@ export const joinRoom = createAsyncThunk(
       if (!roomSnapshot.exists())
         throw new Error('Room not Found');
 
-      const roomData = roomSnapshot.data() as typeof initialState;
+      const roomData = roomSnapshot.data() as DatabaseState;
       console.log("Room data:", roomData);
 
-      // NEED FIX
+      // NEED FIX player filter by comparing player name
       if (Object.values(roomData.players).filter(player => player).length >= 1000)
         throw new Error('Room Full');
 
       await setDoc(roomDoc, roomData);
-      return roomData;
+      return {
+        ...roomData,
+        playerName: input.playerName
+      };
 
     } catch (err) {
       console.error(err);
@@ -100,20 +109,26 @@ export const joinRoom = createAsyncThunk(
 );
 
 
-export const selectCharacter = createAsyncThunk(
+export const setCharacter = createAsyncThunk(
   'room/selectCharacter',
-  async (character: string, { rejectWithValue }) => {
+  async (character: string, { getState, rejectWithValue }) => {
+    const state = (getState() as RootState).room;
+
+    console.log('name', state.self.playerName);
+
     try {
-      const roomDoc = doc(firestore, 'rooms', initialState.roomInfo.roomId);
+      const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
       const roomSnapshot = await getDoc(roomDoc);
 
       if (roomSnapshot.exists()) {
-        const roomData = roomSnapshot.data() as typeof initialState;
+        const roomData = roomSnapshot.data() as DatabaseState;
 
-        // roomData.players[character] = {
-        //   name: '',
-        //   status: Status.alive,
-        // };
+        roomData.players[character] = {
+          playerName: state.self.playerName,
+          status: Status.alive,
+        };
+
+        await setDoc(roomDoc, roomData);
       }
 
     } catch (err) {
@@ -127,19 +142,25 @@ export const selectCharacter = createAsyncThunk(
 const roomSlice = createSlice({
   name: 'room',
   initialState,
-  reducers: {},
+  reducers: {
+    updateLocalState: (state, action: PayloadAction<DatabaseState>) => {
+      state.players = action.payload.players;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(
       createRoom.fulfilled,
       (state, action) => {
         state.roomInfo = action.payload.roomInfo;
         state.players = action.payload.players;
+        state.self.playerName = action.payload.playerName;
       }
     ).addCase(
       joinRoom.fulfilled,
       (state, action) => {
         state.roomInfo = action.payload.roomInfo;
         state.players = action.payload.players;
+        state.self.playerName = action.payload.playerName;
       }
     );/*.addCase(
       selectCharacter.fulfilled,
@@ -150,9 +171,9 @@ const roomSlice = createSlice({
   }
 });
 
-// export const {
-
-// } = roomSplice.actions;
+export const {
+  updateLocalState
+} = roomSlice.actions;
 export default roomSlice.reducer;
 
 
