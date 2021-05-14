@@ -16,9 +16,8 @@ const CreateRoom = () => {
     <div className={styles.create}>
       <Form
         submitFn={async (input) => {
-          dispatch(createRoom(input));
+          await dispatch(createRoom(input));
           history.push('/lobby');
-          return true;
         }}
 
         inputItems={{

@@ -7,6 +7,7 @@ import Homepage from 'pages/Homepage/Homepage';
 import JoinRoom from 'pages/JoinRoom/JoinRoom';
 import CreateRoom from 'pages/CreateRoom/CreateRoom';
 import Lobby from 'pages/Lobby/Lobby';
+import Game from 'pages/Game/Game';
 
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
         </Route>
         <Route exact path='/lobby'>
           <Lobby />
+        </Route>
+        <Route exact path='/game'>
+          <Game />
         </Route>
       </Switch>
     </>

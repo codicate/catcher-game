@@ -24,7 +24,8 @@ const initialState = {
     roomId: '',
   },
   self: {
-    playerName: ''
+    playerName: '',
+    creator: true,
   },
   players: Object.fromEntries(
     Object.keys(Characters)
@@ -64,7 +65,10 @@ export const createRoom = createAsyncThunk(
       await setDoc(roomDoc, roomData);
       return {
         ...roomData,
-        playerName: input.playerName
+        self: {
+          playerName: input.playerName,
+          creator: true
+        }
       };
 
     } catch (err) {
@@ -90,14 +94,19 @@ export const joinRoom = createAsyncThunk(
       const roomData = roomSnapshot.data() as DatabaseState;
       console.log("Room data:", roomData);
 
-      // NEED FIX player filter by comparing player name
-      if (Object.values(roomData.players).filter(player => player).length >= 1000)
+      if (
+        Object.values(roomData.players)
+          .filter(player => player.playerName)
+          .length >= 8
+      )
         throw new Error('Room Full');
 
-      await setDoc(roomDoc, roomData);
       return {
         ...roomData,
-        playerName: input.playerName
+        self: {
+          playerName: input.playerName,
+          creator: true
+        }
       };
 
     } catch (err) {
@@ -152,22 +161,15 @@ const roomSlice = createSlice({
       createRoom.fulfilled,
       (state, action) => {
         state.roomInfo = action.payload.roomInfo;
-        state.players = action.payload.players;
-        state.self.playerName = action.payload.playerName;
+        state.self = action.payload.self;
       }
     ).addCase(
       joinRoom.fulfilled,
       (state, action) => {
         state.roomInfo = action.payload.roomInfo;
-        state.players = action.payload.players;
-        state.self.playerName = action.payload.playerName;
+        state.self = action.payload.self;
       }
-    );/*.addCase(
-      selectCharacter.fulfilled,
-      (state, action) => {
-
-      }
-    );*/
+    );
   }
 });
 
@@ -179,10 +181,10 @@ export default roomSlice.reducer;
 
 const selectSelf = (state: RootState) => state.room;
 
-export const selectRoomInfo = createDraftSafeSelector(selectSelf, (room) =>
-  room.roomInfo
-);
+export const selectRoom = createDraftSafeSelector(selectSelf, (room) => room);
 
-export const selectPlayers = createDraftSafeSelector(selectSelf, (room) =>
-  room.players
+export const selectNumOfPlayers = createDraftSafeSelector(selectSelf, (room) =>
+  Object.values(room.players)
+    .filter((player) => player.playerName)
+    .length
 );

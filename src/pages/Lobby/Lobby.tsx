@@ -1,13 +1,13 @@
 import styles from 'pages/Lobby/Lobby.module.scss';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
-import { firestore } from 'utils/firebase';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { useFirebaseSyncState } from 'utils/hooks';
 
 import { useAppSelector, useAppDispatch } from 'app/hooks';
 import {
-  updateLocalState, DatabaseState, setCharacter, Player,
-  selectRoomInfo, selectPlayers,
+  setCharacter, Player,
+  selectRoom, selectNumOfPlayers
 
 } from 'app/roomSlice';
 
@@ -15,22 +15,14 @@ import PlayerDiv from 'pages/Lobby/PlayerDiv';
 
 
 const Lobby = () => {
+  const history = useHistory();
   const dispatch = useAppDispatch();
 
-  const roomInfo = useAppSelector(selectRoomInfo);
-  const players = useAppSelector(selectPlayers);
-
-  useEffect(() => {
-    const roomDoc = doc(firestore, 'rooms', roomInfo.roomId);
-
-    const unsubSnapshot = onSnapshot(roomDoc, (doc) => {
-      dispatch(updateLocalState(doc.data() as DatabaseState));
-    });
-
-    return () => unsubSnapshot();
-  }, [dispatch, roomInfo]);
-
   const [chosenCharacter, setChosenCharacter] = useState(false);
+  const { roomInfo, players, self } = useAppSelector(selectRoom);
+  const numOfPlayers = useAppSelector(selectNumOfPlayers);
+
+  useFirebaseSyncState();
 
   const chooseCharacter = (character: string, player: Player) => {
     if (!chosenCharacter && !player?.playerName) {
@@ -41,6 +33,7 @@ const Lobby = () => {
 
   return (
     <div className={styles.lobby}>
+
       <button
         className={styles.roomId}
         onClick={async () => {
@@ -54,6 +47,7 @@ const Lobby = () => {
         <span className={styles.gap}></span>
         <span>{roomInfo.roomId}</span>
       </button>
+
       <div className={styles.board}>
         {
           Object.entries(players).sort().map(([character, player], idx) =>
@@ -67,6 +61,22 @@ const Lobby = () => {
           )
         }
       </div>
+
+      {
+        self.creator && (
+          <button
+            className={styles.start}
+            onClick={() => {
+              if (numOfPlayers < 3)
+                return alert('Not Enought Players');
+
+              history.push('/game');
+            }}
+          >
+            Start Game
+          </button>
+        )
+      }
     </div>
   );
 };
