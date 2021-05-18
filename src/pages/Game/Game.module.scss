@@ -34,6 +34,7 @@
 .players {
   display: flex;
   flex-flow: row wrap;
+  min-width: 48em;
 
   border-radius: 0 2em 2em 0;
   border: .5em solid black;

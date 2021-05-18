@@ -2,6 +2,7 @@
 
 .playerHand {
   display: flex;
+  justify-content: center;
   align-items: center;
 
   height: 25%;
@@ -10,6 +11,10 @@
   &:nth-of-type(even) {
     flex-flow: row-reverse;
   }
+
+  &>*{
+    flex-shrink: 0;
+  }
 }
 
 .avatar {
@@ -17,8 +22,8 @@
   flex-flow: column;
   align-items: center;
 
-  width: 12em;
-  margin: 0 2em;
+  width: 10em;
+  margin: 0 1.5em;
 
   img {
     height: 5rem;
