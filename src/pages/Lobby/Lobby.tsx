@@ -37,7 +37,7 @@ const Lobby = () => {
 
       <RoomInfo {...roomInfo} />
 
-      <div className={styles.board}>
+      <div className={styles.players}>
         {
           Object.entries(players).sort().map(([character, player], idx) =>
             <PlayerDiv

@@ -37,20 +37,23 @@ const Game = () => {
 
         }}
       />
-      <Card
-        type='choiceA'
-        text={cards[0].choices.a}
-        onClick={() => {
 
-        }}
-      />
-      <Card
-        type='choiceB'
-        text={cards[0].choices.b}
-        onClick={() => {
+      <div className={styles.choices}>
+        <Card
+          type='choiceA'
+          text={cards[0].choices.a}
+          onClick={() => {
 
-        }}
-      />
+          }}
+        />
+        <Card
+          type='choiceB'
+          text={cards[0].choices.b}
+          onClick={() => {
+
+          }}
+        />
+      </div>
 
       <div className={styles.board}>
       </div>

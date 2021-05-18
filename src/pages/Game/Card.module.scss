@@ -9,18 +9,29 @@
   border-radius: 1.5em;
   background-color: hsl(60, 56%, 91%);
   box-shadow: 0 0 .5em 1px hsl(60, 26%, 21%);
-
-  transition: .2s ease-out;
-
-  &:hover {
-    transform: translateY(-1em);
-  }
 }
 
 .question {
   height: 17em;
   width: 15em;
   font-size: 1.25rem;
+}
+
+.choiceA,
+.choiceB {
+  cursor: pointer;
+  transition: .2s ease-out;
+
+  &::after {
+    z-index: -1;
+
+    position: absolute;
+    bottom: -45px;
+    right: -20px;
+
+    font-size: 12rem;
+    color: hsl(60, 26%, 71%);
+  }
 }
 
 .choiceA {
@@ -46,16 +57,4 @@
   &:hover {
     transform: rotate(20deg) translateY(-1em);
   }
-}
-
-.choiceA::after,
-.choiceB::after {
-  z-index: -1;
-
-  position: absolute;
-  bottom: -45px;
-  right: -20px;
-
-  font-size: 12rem;
-  color: hsl(60, 26%, 71%);
 }
