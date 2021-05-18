@@ -8,12 +8,14 @@ const PlayerHand = ({
   idx,
   character,
   player,
+  lives,
   choice,
   reveal
 }: {
   idx: number;
   character: string;
   player: Player;
+  lives: number;
   choice?: string;
   reveal: boolean;
 }) => {
@@ -26,6 +28,13 @@ const PlayerHand = ({
         />
         <div>
           {player?.playerName || 'Choose me'}
+        </div>
+        <div className={styles.lives}>
+          {
+            [...Array(lives)].map(() => (
+              <div />
+            ))
+          }
         </div>
       </div>
       {choice && (

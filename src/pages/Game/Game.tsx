@@ -32,12 +32,13 @@ const Game = () => {
               player.playerName
             ).map(([character, player], idx) =>
               <PlayerHand
-                reveal={false}
                 key={idx}
                 idx={idx}
                 character={character}
                 player={player}
+                lives={3}
                 choice={cards[0].choices.a}
+                reveal={false}
               />
             )
         }

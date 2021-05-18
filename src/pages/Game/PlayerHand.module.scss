@@ -45,6 +45,16 @@
   }
 }
 
+.lives {
+  display: flex;
+
+  div::after {
+    content: '✪';
+    margin: 0 .125em;
+    color: hsl(41, 98%, 25%);
+  }
+}
+
 .backOfCard {
   position: relative;
   height: 10em;
