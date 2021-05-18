@@ -4,12 +4,12 @@ const Card = ({
   text, type, onClick
 }: {
   text: string;
-  type?: 'question' | 'choiceA' | 'choiceB';
-  onClick: () => void;
+  type: 'question' | 'choiceA' | 'choiceB' | 'choiceA small' | 'choiceB small';
+  onClick?: () => void;
 }) => {
   return (
     <div
-      className={`${styles.card} ${type && styles[type]}`}
+      className={`${styles.card} ${type && type.split(' ').map(type => styles[type]).join(' ')}`}
       onClick={onClick}
     >
       {text}

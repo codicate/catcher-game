@@ -16,11 +16,6 @@
 
   padding: 2em;
 
-
-
-
-
-
   .roomInfo {
     width: 100%;
     font-size: 1rem;
@@ -37,6 +32,9 @@
 }
 
 .players {
+  display: flex;
+  flex-flow: row wrap;
+
   border-radius: 0 2em 2em 0;
   border: .5em solid black;
   box-shadow: 0 0 10px hsl(0, 0%, 25%);

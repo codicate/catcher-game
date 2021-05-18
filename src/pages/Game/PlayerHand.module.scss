@@ -1,0 +1,41 @@
+@import "/src/styles/variables";
+
+.playerHand {
+  display: flex;
+  align-items: center;
+
+  height: 25%;
+  width: 50%;
+
+  &:nth-of-type(even) {
+    flex-flow: row-reverse;
+  }
+}
+
+.avatar {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+
+  width: 12em;
+  margin: 0 2em;
+
+  img {
+    height: 5rem;
+    width: 5rem;
+    margin: .5em;
+
+    border-radius: 50%;
+    border: .25em solid $black-lighten;
+  }
+
+  div {
+    font-size: 1.25rem;
+    line-height: 1.5em;
+
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

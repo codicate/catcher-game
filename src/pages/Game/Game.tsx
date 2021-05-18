@@ -12,7 +12,7 @@ import {
 import cards from 'assets/cards';
 import RoomInfo from 'components/RoomInfo';
 import Card from 'pages/Game/Card';
-import PlayerDiv from 'pages/Lobby/PlayerDiv';
+import PlayerHand from 'pages/Game/PlayerHand';
 
 
 const Game = () => {
@@ -26,7 +26,17 @@ const Game = () => {
   return (
     <div className={styles.game}>
       <div className={styles.players}>
-
+        {
+          Object.entries(players).sort().map(([character, player], idx) =>
+            <PlayerHand
+              key={idx}
+              idx={idx}
+              character={character}
+              player={player}
+              choice={cards[0].choices.a}
+            />
+          )
+        }
       </div>
 
       <div className={styles.panel}>

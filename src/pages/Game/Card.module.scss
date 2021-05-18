@@ -1,4 +1,7 @@
 .card {
+  z-index: 1;
+  position: relative;
+
   height: 12em;
   width: 10em;
   padding: 1.5em;
@@ -19,42 +22,55 @@
 
 .choiceA,
 .choiceB {
-  cursor: pointer;
-  transition: .2s ease-out;
+  &:not(.small) {
+    cursor: pointer;
+    transition: .2s ease-out;
+  }
 
   &::after {
     z-index: -1;
-
     position: absolute;
-    bottom: -45px;
-    right: -20px;
+    bottom: -.25em;
+    right: -.075em;
 
-    font-size: 12rem;
+    font-size: 13rem;
     color: hsl(60, 26%, 71%);
   }
 }
 
 .choiceA {
-  z-index: 1;
-  transform: rotate(-20deg);
-
   &::after {
     content: 'A';
   }
 
-  &:hover {
-    transform: rotate(-20deg) translateY(-1em);
+  &:not(.small) {
+    z-index: 2;
+    transform: rotate(-20deg);
+
+    &:hover {
+      transform: rotate(-20deg) translateY(-1em);
+    }
   }
 }
 
 .choiceB {
-  transform: rotate(20deg);
-
   &::after {
     content: 'B';
   }
 
-  &:hover {
-    transform: rotate(20deg) translateY(-1em);
+  &:not(.small) {
+    transform: rotate(20deg);
+
+    &:hover {
+      transform: rotate(20deg) translateY(-1em);
+    }
+  }
+}
+
+.small {
+  font-size: .75rem;
+
+  &::after {
+    font-size: 9rem;
   }
 }
