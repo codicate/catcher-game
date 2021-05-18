@@ -23,7 +23,10 @@ const Game = () => {
 
   return (
     <div className={styles.game}>
-      <RoomInfo {...roomInfo} />
+      <RoomInfo
+        theme={styles.roomInfo}
+        {...roomInfo}
+      />
 
       <div className={styles.board}>
       </div>

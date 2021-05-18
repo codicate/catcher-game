@@ -1,14 +1,15 @@
+@import "/src/styles/variables";
+@import "/src/styles/mixins";
+
 .roomInfo {
-  position: absolute;
-  top: 1em;
-  right: 1em;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1em;
 
   @include button;
-  font-size: 1rem;
+  font-size: 2rem;
 
   transition: 0.1s ease-out;
 
@@ -20,7 +21,7 @@
   }
 
   &:active {
-    font-size: .875rem;
+    font-size: 1.75rem;
   }
 
   &:hover::after {

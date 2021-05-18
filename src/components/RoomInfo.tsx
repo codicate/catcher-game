@@ -1,14 +1,15 @@
 import styles from 'components/RoomInfo.module.scss';
 
 const RoomInfo = ({
-  roomName, roomId
+  roomName, roomId, theme
 }: {
   roomName: string;
   roomId: string;
+  theme?: string;
 }) => {
   return (
     <button
-      className={styles.roomInfo}
+      className={`${styles.roomInfo} ${(theme || '')}`}
       onClick={async () => {
         await navigator.clipboard.writeText(roomId);
       }}
