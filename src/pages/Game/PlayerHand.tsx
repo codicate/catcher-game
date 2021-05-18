@@ -8,12 +8,14 @@ const PlayerHand = ({
   idx,
   character,
   player,
-  choice
+  choice,
+  reveal
 }: {
   idx: number;
   character: string;
   player: Player;
   choice?: string;
+  reveal: boolean;
 }) => {
   return (
     <div className={styles.playerHand}>
@@ -27,10 +29,14 @@ const PlayerHand = ({
         </div>
       </div>
       {choice && (
-        <Card
-          type='choiceA small'
-          text={choice}
-        />
+        reveal ? (
+          <Card
+            type='choiceA small'
+            text={choice}
+          />
+        ) : (
+          <div className={styles.backOfCard} />
+        )
       )}
     </div>
   );

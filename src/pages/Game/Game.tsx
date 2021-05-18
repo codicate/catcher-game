@@ -27,15 +27,19 @@ const Game = () => {
     <div className={styles.game}>
       <div className={styles.players}>
         {
-          Object.entries(players).sort().map(([character, player], idx) =>
-            <PlayerHand
-              key={idx}
-              idx={idx}
-              character={character}
-              player={player}
-              choice={cards[0].choices.a}
-            />
-          )
+          Object.entries(players).sort()
+            .filter(([_, player]) =>
+              player.playerName
+            ).map(([character, player], idx) =>
+              <PlayerHand
+                reveal={false}
+                key={idx}
+                idx={idx}
+                character={character}
+                player={player}
+                choice={cards[0].choices.a}
+              />
+            )
         }
       </div>
 

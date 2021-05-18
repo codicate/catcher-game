@@ -12,7 +12,7 @@
     flex-flow: row-reverse;
   }
 
-  &>*{
+  &>* {
     flex-shrink: 0;
   }
 }
@@ -43,4 +43,17 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+}
+
+.backOfCard {
+  position: relative;
+  height: 10em;
+  width: 8em;
+
+  border-radius: 1.5em;
+  box-shadow:
+    0 0 0 .25em white,
+    0 0 0 .625em hsl(60, 26%, 71%),
+    0 0 0 1em white;
+  background: repeating-conic-gradient(hsl(60, 10%, 44%) 0% 25%, hsl(60, 57%, 91%) 0% 50%) 50% / 2em 2em;
 }
