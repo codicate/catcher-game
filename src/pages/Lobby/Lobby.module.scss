@@ -23,7 +23,9 @@
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
-    margin: 3em 0;
+
+    max-width: 80em;
+    margin: 3em auto;
   }
 
   .start {

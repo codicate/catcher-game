@@ -25,37 +25,40 @@ const Game = () => {
 
   return (
     <div className={styles.game}>
-      <RoomInfo
-        theme={styles.roomInfo}
-        {...roomInfo}
-      />
+      <div className={styles.players}>
 
-      <Card
-        type='question'
-        text={cards[0].question}
-        onClick={() => {
-
-        }}
-      />
-
-      <div className={styles.choices}>
-        <Card
-          type='choiceA'
-          text={cards[0].choices.a}
-          onClick={() => {
-
-          }}
-        />
-        <Card
-          type='choiceB'
-          text={cards[0].choices.b}
-          onClick={() => {
-
-          }}
-        />
       </div>
 
-      <div className={styles.board}>
+      <div className={styles.panel}>
+        <RoomInfo
+          theme={styles.roomInfo}
+          {...roomInfo}
+        />
+
+        <Card
+          type='question'
+          text={cards[0].question}
+          onClick={() => {
+
+          }}
+        />
+
+        <div className={styles.choices}>
+          <Card
+            type='choiceA'
+            text={cards[0].choices.a}
+            onClick={() => {
+
+            }}
+          />
+          <Card
+            type='choiceB'
+            text={cards[0].choices.b}
+            onClick={() => {
+
+            }}
+          />
+        </div>
       </div>
     </div>
   );
