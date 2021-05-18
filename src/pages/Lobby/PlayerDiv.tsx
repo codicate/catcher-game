@@ -1,4 +1,4 @@
-import styles from 'pages/Lobby/Player.module.scss';
+import styles from 'pages/Lobby/PlayerDiv.module.scss';
 
 import { Player } from 'app/roomSlice';
 import characterImgs from 'assets/characterImgs';
