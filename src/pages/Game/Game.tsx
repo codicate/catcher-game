@@ -5,7 +5,7 @@ import { useFirebaseSyncState } from 'utils/hooks';
 
 import { useAppSelector, useAppDispatch } from 'app/hooks';
 import {
-  setCharacter, Player,
+  setCharacter, Player, makeChoice,
   selectRoom, selectNumOfPlayers
 } from 'app/roomSlice';
 
@@ -18,7 +18,7 @@ import PlayerHand from 'pages/Game/PlayerHand';
 const Game = () => {
   const dispatch = useAppDispatch();
 
-  const { roomInfo, players, self } = useAppSelector(selectRoom);
+  const { roomInfo, players, reveal } = useAppSelector(selectRoom);
   const numOfPlayers = useAppSelector(selectNumOfPlayers);
 
   useFirebaseSyncState();
@@ -33,12 +33,11 @@ const Game = () => {
             ).map(([character, player], idx) =>
               <PlayerHand
                 key={idx}
-                idx={idx}
                 character={character}
                 player={player}
                 lives={3}
-                choice={cards[0].choices.a}
-                reveal={false}
+                choice={player.choice}
+                reveal={true}
               />
             )
         }
@@ -63,14 +62,14 @@ const Game = () => {
             type='choiceA'
             text={cards[0].choices.a}
             onClick={() => {
-
+              dispatch(makeChoice(cards[0].choices.a));
             }}
           />
           <Card
             type='choiceB'
             text={cards[0].choices.b}
             onClick={() => {
-
+              dispatch(makeChoice(cards[0].choices.b));
             }}
           />
         </div>

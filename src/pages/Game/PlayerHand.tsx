@@ -5,20 +5,19 @@ import characterImgs from 'assets/characterImgs';
 import Card from 'pages/Game/Card';
 
 const PlayerHand = ({
-  idx,
   character,
   player,
   lives,
   choice,
   reveal
 }: {
-  idx: number;
   character: string;
   player: Player;
   lives: number;
   choice?: string;
   reveal: boolean;
 }) => {
+  console.log('reveal', reveal);
   return (
     <div className={styles.playerHand}>
       <div className={styles.avatar}>
@@ -31,22 +30,21 @@ const PlayerHand = ({
         </div>
         <div className={styles.lives}>
           {
-            [...Array(lives)].map(() => (
-              <div />
+            [...Array(lives)].map((_, idx) => (
+              <div key={idx} />
             ))
           }
         </div>
       </div>
-      {choice && (
-        reveal ? (
-          <Card
-            type='choiceA small'
-            text={choice}
-          />
-        ) : (
-          <div className={styles.backOfCard} />
-        )
-      )}
+      {choice && reveal ? (
+        <Card
+          type='choiceA small'
+          text={choice}
+        />
+      ) : (
+        <div className={styles.backOfCard} />
+      )
+      }
     </div>
   );
 };

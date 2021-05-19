@@ -16,6 +16,7 @@ export interface Player {
 const player = {
   playerName: '',
   status: Status.alive,
+  choice: ''
 };
 
 const initialState = {
@@ -23,19 +24,23 @@ const initialState = {
     roomName: '',
     roomId: '',
   },
-  self: {
-    playerName: '',
-    creator: true,
-  },
+  start: false,
   players: Object.fromEntries(
     Object.keys(Characters)
       .slice(Object.keys(Characters).length / 2)
       .map(character => [character, player])
-  )
+  ),
+
+  self: {
+    playerName: '',
+    creator: true,
+  },
+  character: '',
+  reveal: false
 };
 
 export type LocalState = typeof initialState;
-export type DatabaseState = Omit<typeof initialState, 'self'>;
+export type DatabaseState = Omit<typeof initialState, 'self' | 'character' | 'reveal'>;
 
 
 const getCodeFromDate = (numOfDigit: number) => {
@@ -105,7 +110,7 @@ export const joinRoom = createAsyncThunk(
         ...roomData,
         self: {
           playerName: input.playerName,
-          creator: true
+          creator: false
         }
       };
 
@@ -123,7 +128,30 @@ export const setCharacter = createAsyncThunk(
   async (character: string, { getState, rejectWithValue }) => {
     const state = (getState() as RootState).room;
 
-    console.log('name', state.self.playerName);
+    try {
+      const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
+      const roomSnapshot = await getDoc(roomDoc);
+
+      if (roomSnapshot.exists()) {
+        const roomData = roomSnapshot.data() as DatabaseState;
+        roomData.players[character].playerName = state.self.playerName;
+        await setDoc(roomDoc, roomData);
+      }
+
+      return character;
+
+    } catch (err) {
+      console.error(err);
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+
+export const startGame = createAsyncThunk(
+  'room/startGame',
+  async (_, { getState, rejectWithValue }) => {
+    const state = (getState() as RootState).room;
 
     try {
       const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
@@ -131,14 +159,34 @@ export const setCharacter = createAsyncThunk(
 
       if (roomSnapshot.exists()) {
         const roomData = roomSnapshot.data() as DatabaseState;
-
-        roomData.players[character] = {
-          playerName: state.self.playerName,
-          status: Status.alive,
-        };
-
+        roomData.start = true;
         await setDoc(roomDoc, roomData);
       }
+
+      return true;
+    } catch (err) {
+      console.error(err);
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const makeChoice = createAsyncThunk(
+  'room/makeChoice',
+  async (choice: string, { getState, rejectWithValue }) => {
+    const state = (getState() as RootState).room;
+
+    try {
+      const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
+      const roomSnapshot = await getDoc(roomDoc);
+
+      if (roomSnapshot.exists()) {
+        const roomData = roomSnapshot.data() as DatabaseState;
+        state.character && (roomData.players[state.character].choice = choice);
+        await setDoc(roomDoc, roomData);
+      }
+
+      return choice;
 
     } catch (err) {
       console.error(err);
@@ -154,6 +202,15 @@ const roomSlice = createSlice({
   reducers: {
     updateLocalState: (state, action: PayloadAction<DatabaseState>) => {
       state.players = action.payload.players;
+      state.start = action.payload.start;
+
+      console.log(state.players);
+
+      if (Object.values(state.players).every((player) => (!player.playerName) || (player.choice))) {
+        state.reveal = true;
+      } else {
+        state.reveal = false
+      };
     }
   },
   extraReducers: (builder) => {
@@ -168,6 +225,16 @@ const roomSlice = createSlice({
       (state, action) => {
         state.roomInfo = action.payload.roomInfo;
         state.self = action.payload.self;
+      }
+    ).addCase(
+      startGame.fulfilled,
+      (state, action) => {
+        state.start = action.payload;
+      }
+    ).addCase(
+      setCharacter.fulfilled,
+      (state, action) => {
+        state.character = action.payload;
       }
     );
   }

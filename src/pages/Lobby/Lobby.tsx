@@ -1,14 +1,13 @@
 import styles from 'pages/Lobby/Lobby.module.scss';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 
 import { useFirebaseSyncState } from 'utils/hooks';
 
 import { useAppSelector, useAppDispatch } from 'app/hooks';
 import {
-  setCharacter, Player,
+  setCharacter, Player, startGame,
   selectRoom, selectNumOfPlayers
-
 } from 'app/roomSlice';
 
 import RoomInfo from 'components/RoomInfo';
@@ -20,10 +19,12 @@ const Lobby = () => {
   const dispatch = useAppDispatch();
 
   const [chosenCharacter, setChosenCharacter] = useState(false);
-  const { roomInfo, players, self } = useAppSelector(selectRoom);
+  const { roomInfo, players, self, start } = useAppSelector(selectRoom);
   const numOfPlayers = useAppSelector(selectNumOfPlayers);
 
   useFirebaseSyncState();
+
+
 
   const chooseCharacter = (character: string, player: Player) => {
     if (!chosenCharacter && !player?.playerName) {
@@ -32,42 +33,47 @@ const Lobby = () => {
     }
   };
 
-  return (
-    <div className={styles.lobby}>
+  return <>
+    {
+      start ? (
+        <Redirect to='/game' />
+      ) : (
+        <div className={styles.lobby}>
+          <RoomInfo {...roomInfo} />
 
-      <RoomInfo {...roomInfo} />
+          <div className={styles.players}>
+            {
+              Object.entries(players).sort().map(([character, player], idx) =>
+                <PlayerDiv
+                  key={idx}
+                  idx={idx}
+                  chooseCharacter={chooseCharacter}
+                  character={character}
+                  player={player}
+                />
+              )
+            }
+          </div>
 
-      <div className={styles.players}>
-        {
-          Object.entries(players).sort().map(([character, player], idx) =>
-            <PlayerDiv
-              key={idx}
-              idx={idx}
-              chooseCharacter={chooseCharacter}
-              character={character}
-              player={player}
-            />
-          )
-        }
-      </div>
+          {
+            self.creator && (
+              <button
+                className={styles.start}
+                onClick={() => {
+                  if (numOfPlayers < 1)
+                    return alert('Not Enought Players');
 
-      {
-        self.creator && (
-          <button
-            className={styles.start}
-            onClick={() => {
-              if (numOfPlayers < 3)
-                return alert('Not Enought Players');
-
-              history.push('/game');
-            }}
-          >
-            Start Game
-          </button>
-        )
-      }
-    </div>
-  );
+                  dispatch(startGame());
+                }}
+              >
+                Start Game
+              </button>
+            )
+          }
+        </div>
+      )
+    }
+  </>;
 };
 
 export default Lobby;
