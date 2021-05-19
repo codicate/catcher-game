@@ -57,10 +57,11 @@
 
 .backOfCard {
   position: relative;
-  height: 10rem;
-  width: 8rem;
+  height: 10em;
+  width: 8em;
 
-  border-radius: 1.5rem;
+  font-size: .75rem;
+  border-radius: 1.5em;
   box-shadow:
     0 0 0 .25em white,
     0 0 0 .625em hsl(60, 26%, 71%),
