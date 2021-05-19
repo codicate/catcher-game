@@ -37,7 +37,7 @@ const Game = () => {
                 player={player}
                 lives={3}
                 choice={player.choice}
-                reveal={true}
+                reveal={reveal}
               />
             )
         }

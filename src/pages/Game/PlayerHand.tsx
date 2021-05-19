@@ -36,15 +36,16 @@ const PlayerHand = ({
           }
         </div>
       </div>
-      {choice && reveal ? (
-        <Card
-          type='choiceA small'
-          text={choice}
-        />
-      ) : (
-        <div className={styles.backOfCard} />
-      )
-      }
+      {choice && (
+        reveal ? (
+          <Card
+            type='choiceA small'
+            text={choice}
+          />
+        ) : (
+          <div className={styles.backOfCard} />
+        )
+      )}
     </div>
   );
 };

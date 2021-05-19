@@ -60,7 +60,7 @@ const Lobby = () => {
               <button
                 className={styles.start}
                 onClick={() => {
-                  if (numOfPlayers < 1)
+                  if (numOfPlayers < 3)
                     return alert('Not Enought Players');
 
                   dispatch(startGame());
