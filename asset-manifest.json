@@ -1,20 +1,28 @@
 {
   "files": {
-    "main.css": "/catcher-game/static/css/main.efc1a5e6.chunk.css",
-    "main.js": "/catcher-game/static/js/main.7d3417e3.chunk.js",
-    "main.js.map": "/catcher-game/static/js/main.7d3417e3.chunk.js.map",
+    "main.css": "/catcher-game/static/css/main.d849b89e.chunk.css",
+    "main.js": "/catcher-game/static/js/main.b0142f4a.chunk.js",
+    "main.js.map": "/catcher-game/static/js/main.b0142f4a.chunk.js.map",
     "runtime-main.js": "/catcher-game/static/js/runtime-main.1281cddd.js",
     "runtime-main.js.map": "/catcher-game/static/js/runtime-main.1281cddd.js.map",
-    "static/js/2.9efd2612.chunk.js": "/catcher-game/static/js/2.9efd2612.chunk.js",
-    "static/js/2.9efd2612.chunk.js.map": "/catcher-game/static/js/2.9efd2612.chunk.js.map",
+    "static/js/2.b48bb0c4.chunk.js": "/catcher-game/static/js/2.b48bb0c4.chunk.js",
+    "static/js/2.b48bb0c4.chunk.js.map": "/catcher-game/static/js/2.b48bb0c4.chunk.js.map",
     "index.html": "/catcher-game/index.html",
-    "static/css/main.efc1a5e6.chunk.css.map": "/catcher-game/static/css/main.efc1a5e6.chunk.css.map",
-    "static/js/2.9efd2612.chunk.js.LICENSE.txt": "/catcher-game/static/js/2.9efd2612.chunk.js.LICENSE.txt"
+    "static/css/main.d849b89e.chunk.css.map": "/catcher-game/static/css/main.d849b89e.chunk.css.map",
+    "static/js/2.b48bb0c4.chunk.js.LICENSE.txt": "/catcher-game/static/js/2.b48bb0c4.chunk.js.LICENSE.txt",
+    "static/media/Ackley.375d18e7.png": "/catcher-game/static/media/Ackley.375d18e7.png",
+    "static/media/Allie.5367fb35.png": "/catcher-game/static/media/Allie.5367fb35.png",
+    "static/media/DB.0fafdd9c.png": "/catcher-game/static/media/DB.0fafdd9c.png",
+    "static/media/Holden.0c4aca3e.png": "/catcher-game/static/media/Holden.0c4aca3e.png",
+    "static/media/Jane.7981ce94.png": "/catcher-game/static/media/Jane.7981ce94.png",
+    "static/media/Phoebe.5ea1fc39.png": "/catcher-game/static/media/Phoebe.5ea1fc39.png",
+    "static/media/Sally.ca5be420.png": "/catcher-game/static/media/Sally.ca5be420.png",
+    "static/media/Stradlater.f3acccda.png": "/catcher-game/static/media/Stradlater.f3acccda.png"
   },
   "entrypoints": [
     "static/js/runtime-main.1281cddd.js",
-    "static/js/2.9efd2612.chunk.js",
-    "static/css/main.efc1a5e6.chunk.css",
-    "static/js/main.7d3417e3.chunk.js"
+    "static/js/2.b48bb0c4.chunk.js",
+    "static/css/main.d849b89e.chunk.css",
+    "static/js/main.b0142f4a.chunk.js"
   ]
 }
