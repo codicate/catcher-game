@@ -64,6 +64,8 @@ export const createRoom = createAsyncThunk(
       },
       players: initialState.players,
       start: false,
+      hide: true,
+      reveal: false
     };
 
     try {
@@ -179,58 +181,55 @@ export const makeChoice = createAsyncThunk(
     try {
       const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
       const roomSnapshot = await getDoc(roomDoc);
+      const roomData = roomSnapshot.data() as DatabaseState;
 
-      if (roomSnapshot.exists()) {
-        const roomData = roomSnapshot.data() as DatabaseState;
-        state.character && (roomData.players[state.character].choice = choice);
+      state.character && (roomData.players[state.character].choice = choice);
 
-        const reveal = Object.values(roomData.players).every((player) => (!player.playerName) || (player.choice.text));
-        console.log('reveal inside slice', reveal);
+      const reveal = Object.values(roomData.players).every((player) => (!player.playerName) || (player.choice.text));
+      console.log('reveal inside slice', reveal);
 
-        if (reveal) {
-          roomData.hide = false;
-          roomData.reveal = false;
-          console.log('bru', roomData.players[state.character].playerName, roomData.players[state.character].numOfLives);
+      if (reveal) {
+        roomData.hide = false;
+        roomData.reveal = false;
+        console.log('bru', roomData.players[state.character].playerName, roomData.players[state.character].numOfLives);
 
-          const totalPlayers = Object.values(roomData.players)
-            .filter((player) => player.playerName)
-            .length;
+        const totalPlayers = Object.values(roomData.players)
+          .filter((player) => player.playerName)
+          .length;
 
-          roomData.players = Object.fromEntries(
-            Object.entries(roomData.players).map(([character, player]) => {
-              const sameChoicePlayers = Object.values(roomData.players)
-                .filter((otherPlayer) => otherPlayer.choice.text === player.choice.text)
-                .length;
-              const majorityRate = (sameChoicePlayers / totalPlayers);
+        roomData.players = Object.fromEntries(
+          Object.entries(roomData.players).map(([character, player]) => {
+            const sameChoicePlayers = Object.values(roomData.players)
+              .filter((otherPlayer) => otherPlayer.choice.text === player.choice.text)
+              .length;
+            const majorityRate = (sameChoicePlayers / totalPlayers);
 
-              majorityRate === 0.5
-                ? player.numOfLives += 0
-                : majorityRate > 0.5
-                  ? player.numOfLives = state.players[state.character].numOfLives + 1
-                  : player.numOfLives = state.players[state.character].numOfLives - 1;
+            majorityRate === 0.5
+              ? player.numOfLives += 0
+              : majorityRate > 0.5
+                ? player.numOfLives = state.players[state.character].numOfLives + 1
+                : player.numOfLives = state.players[state.character].numOfLives - 1;
 
-              return [character, player];
-            })
-          );
+            return [character, player];
+          })
+        );
 
-          setTimeout(async () => {
-            const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
-            const roomSnapshot = await getDoc(roomDoc);
-            const roomData = roomSnapshot.data() as DatabaseState;
+        setTimeout(async () => {
+          const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
+          const roomSnapshot = await getDoc(roomDoc);
+          const roomData = roomSnapshot.data() as DatabaseState;
 
-            roomData.players = Object.fromEntries(Object.entries(roomData.players).map(([character, player]) => {
-              player.choice = { letter: '', text: '' };
-              return [character, player];
-            }));
-            roomData.hide = true;
-            await setDoc(roomDoc, roomData);
-          }, 3000);
-        }
-
-        await setDoc(roomDoc, roomData);
+          roomData.players = Object.fromEntries(Object.entries(roomData.players).map(([character, player]) => {
+            player.choice = { letter: '', text: '' };
+            return [character, player];
+          }));
+          roomData.hide = true;
+          await setDoc(roomDoc, roomData);
+        }, 6000);
       }
 
-      return choice;
+      await setDoc(roomDoc, roomData);
+      return roomData;
 
     } catch (err) {
       console.error(err);
@@ -271,6 +270,13 @@ const roomSlice = createSlice({
       setCharacter.fulfilled,
       (state, action) => {
         state.character = action.payload;
+      }
+    ).addCase(
+      makeChoice.fulfilled,
+      (state, action) => {
+        state.players = action.payload.players;
+        state.reveal = action.payload.reveal;
+        state.hide = action.payload.hide;
       }
     );
   }

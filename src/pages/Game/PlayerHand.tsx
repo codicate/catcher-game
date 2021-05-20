@@ -34,13 +34,13 @@ const PlayerHand = ({
         </div>
       </div>
       {choice?.text && (
-        !hide ? (
+        hide ? (
+          <div className={styles.backOfCard} />
+        ) : (
           <Card
             type={`choice${choice.letter.toUpperCase()} small`}
             text={choice.text}
           />
-        ) : (
-          <div className={styles.backOfCard} />
         )
       )}
     </div>
