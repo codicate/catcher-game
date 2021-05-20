@@ -13,9 +13,7 @@ import PlayerHand from 'pages/Game/PlayerHand';
 
 const Game = () => {
   const dispatch = useAppDispatch();
-
-  const { roomInfo, players, reveal, hide } = useAppSelector(selectRoom);
-
+  const { roomInfo, players, reveal, hide, questionIdx } = useAppSelector(selectRoom);
   useFirebaseSyncState();
 
   return (
@@ -45,7 +43,7 @@ const Game = () => {
 
         <Card
           type='question'
-          text={cards[0].question}
+          text={cards[questionIdx].question}
           onClick={() => {
 
           }}
@@ -54,14 +52,14 @@ const Game = () => {
         <div className={styles.choices}>
           <Card
             type='choiceA'
-            text={cards[0].choices.a}
+            text={cards[questionIdx].choices.a}
             onClick={() => {
               !reveal && dispatch(makeChoice({ letter: 'a', text: cards[0].choices.a }));
             }}
           />
           <Card
             type='choiceB'
-            text={cards[0].choices.b}
+            text={cards[questionIdx].choices.b}
             onClick={() => {
               !reveal && dispatch(makeChoice({ letter: 'b', text: cards[0].choices.b }));
             }}

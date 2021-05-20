@@ -4,6 +4,7 @@ import { createSlice, createDraftSafeSelector, createAsyncThunk, PayloadAction }
 import { firestore } from 'utils/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
+import cards from 'assets/cards';
 
 export enum Status { dead, alive }
 export enum Characters { Holden, Phoebe, Sally, Jane, Ackley, Stradlater, Allie, DB }
@@ -36,7 +37,8 @@ const initialState = {
   },
   character: '',
   hide: true,
-  reveal: false
+  reveal: false,
+  questionIdx: 0
 };
 
 export type LocalState = typeof initialState;
@@ -65,7 +67,8 @@ export const createRoom = createAsyncThunk(
       players: initialState.players,
       start: false,
       hide: true,
-      reveal: false
+      reveal: false,
+      questionIdx: 0
     };
 
     try {
@@ -173,9 +176,38 @@ export const startGame = createAsyncThunk(
   }
 );
 
+
+const nextRound = createAsyncThunk(
+  'room/nextRound',
+  async (_, { getState }) => {
+    const state = (getState() as RootState).room;
+    const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
+    const roomSnapshot = await getDoc(roomDoc);
+    const roomData = roomSnapshot.data() as DatabaseState;
+
+    roomData.players = Object.fromEntries(Object.entries(roomData.players).map(([character, player]) => {
+      player.choice = { letter: '', text: '' };
+      return [character, player];
+    }));
+
+    roomData.questionIdx = (() => {
+      while (true) {
+        const questionIdx = Math.floor(Math.random() * cards.length);
+        if (questionIdx !== roomData.questionIdx) return questionIdx;
+      }
+    })();
+
+    roomData.reveal = false;
+    roomData.hide = true;
+
+    await setDoc(roomDoc, roomData);
+    return roomData;
+  }
+);
+
 export const makeChoice = createAsyncThunk(
   'room/makeChoice',
-  async (choice: { letter: string, text: string; }, { getState, rejectWithValue }) => {
+  async (choice: { letter: string, text: string; }, { getState, dispatch, rejectWithValue }) => {
     const state = (getState() as RootState).room;
 
     try {
@@ -190,7 +222,7 @@ export const makeChoice = createAsyncThunk(
 
       if (reveal) {
         roomData.hide = false;
-        roomData.reveal = false;
+        roomData.reveal = true;
         console.log('bru', roomData.players[state.character].playerName, roomData.players[state.character].numOfLives);
 
         const totalPlayers = Object.values(roomData.players)
@@ -204,28 +236,19 @@ export const makeChoice = createAsyncThunk(
               .length;
             const majorityRate = (sameChoicePlayers / totalPlayers);
 
-            majorityRate === 0.5
+            (majorityRate === 0.5) || (player.numOfLives === 0)
               ? player.numOfLives += 0
-              : majorityRate > 0.5
-                ? player.numOfLives = state.players[state.character].numOfLives + 1
-                : player.numOfLives = state.players[state.character].numOfLives - 1;
+              : (majorityRate > 0.5)
+                ? player.numOfLives += 1
+                : player.numOfLives -= 1;
 
             return [character, player];
           })
         );
 
-        setTimeout(async () => {
-          const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
-          const roomSnapshot = await getDoc(roomDoc);
-          const roomData = roomSnapshot.data() as DatabaseState;
-
-          roomData.players = Object.fromEntries(Object.entries(roomData.players).map(([character, player]) => {
-            player.choice = { letter: '', text: '' };
-            return [character, player];
-          }));
-          roomData.hide = true;
-          await setDoc(roomDoc, roomData);
-        }, 6000);
+        setTimeout(() => {
+          dispatch(nextRound());
+        }, 5000);
       }
 
       await setDoc(roomDoc, roomData);
@@ -277,6 +300,13 @@ const roomSlice = createSlice({
         state.players = action.payload.players;
         state.reveal = action.payload.reveal;
         state.hide = action.payload.hide;
+      }
+    ).addCase(
+      nextRound.fulfilled,
+      (state, action) => {
+        state.hide = action.payload.hide;
+        state.reveal = action.payload.reveal;
+        state.questionIdx = action.payload.questionIdx;
       }
     );
   }
