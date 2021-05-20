@@ -1,13 +1,9 @@
 import styles from 'pages/Game/Game.module.scss';
-import { useState } from 'react';
 
 import { useFirebaseSyncState } from 'utils/hooks';
 
 import { useAppSelector, useAppDispatch } from 'app/hooks';
-import {
-  setCharacter, Player, makeChoice,
-  selectRoom, selectNumOfPlayers
-} from 'app/roomSlice';
+import { makeChoice, selectRoom } from 'app/roomSlice';
 
 import cards from 'assets/cards';
 import RoomInfo from 'components/RoomInfo';
@@ -19,9 +15,10 @@ const Game = () => {
   const dispatch = useAppDispatch();
 
   const { roomInfo, players, reveal } = useAppSelector(selectRoom);
-  const numOfPlayers = useAppSelector(selectNumOfPlayers);
 
   useFirebaseSyncState();
+
+  console.log('reveal', reveal);
 
   return (
     <div className={styles.game}>
@@ -35,7 +32,6 @@ const Game = () => {
                 key={idx}
                 character={character}
                 player={player}
-                lives={3}
                 choice={player.choice}
                 reveal={reveal}
               />
@@ -62,14 +58,14 @@ const Game = () => {
             type='choiceA'
             text={cards[0].choices.a}
             onClick={() => {
-              dispatch(makeChoice(cards[0].choices.a));
+              !reveal && dispatch(makeChoice(cards[0].choices.a));
             }}
           />
           <Card
             type='choiceB'
             text={cards[0].choices.b}
             onClick={() => {
-              dispatch(makeChoice(cards[0].choices.b));
+              !reveal && dispatch(makeChoice(cards[0].choices.b));
             }}
           />
         </div>

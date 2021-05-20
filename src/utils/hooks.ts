@@ -4,7 +4,7 @@ import { firestore } from 'utils/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
 
 import { useAppSelector, useAppDispatch } from 'app/hooks';
-import { updateLocalState, DatabaseState, selectRoom } from 'app/roomSlice';
+import { recalculateLives, selectRoom } from 'app/roomSlice';
 
 export const useFirebaseSyncState = () => {
   const dispatch = useAppDispatch();
@@ -13,8 +13,8 @@ export const useFirebaseSyncState = () => {
   useEffect(() => {
     const roomDoc = doc(firestore, 'rooms', roomInfo.roomId);
 
-    const unsubSnapshot = onSnapshot(roomDoc, (doc) => {
-      dispatch(updateLocalState(doc.data() as DatabaseState));
+    const unsubSnapshot = onSnapshot(roomDoc, () => {
+      dispatch(recalculateLives());
     });
 
     return () => unsubSnapshot();

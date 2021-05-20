@@ -11,12 +11,15 @@ export enum Characters { Holden, Phoebe, Sally, Jane, Ackley, Stradlater, Allie,
 export interface Player {
   playerName: string,
   status: Status,
+  choice: string,
+  numOfLives: number;
 }
 
 const player = {
   playerName: '',
   status: Status.alive,
-  choice: ''
+  choice: '',
+  numOfLives: 3
 };
 
 const initialState = {
@@ -147,7 +150,6 @@ export const setCharacter = createAsyncThunk(
   }
 );
 
-
 export const startGame = createAsyncThunk(
   'room/startGame',
   async (_, { getState, rejectWithValue }) => {
@@ -196,23 +198,61 @@ export const makeChoice = createAsyncThunk(
 );
 
 
+export const recalculateLives = createAsyncThunk(
+  'room/recalculateLives',
+  async (_, { getState, rejectWithValue }) => {
+    const state = (getState() as RootState).room;
+
+    try {
+      const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
+      const roomSnapshot = await getDoc(roomDoc);
+      const roomData = roomSnapshot.data() as DatabaseState;
+      console.log('bru', roomData)
+
+      const totalPlayers = Object.values(roomData.players)
+        .filter((player) => player.playerName)
+        .length;
+
+      const reveal = (roomData.start) && (Object.values(roomData.players).every((player) => (!player.playerName) || (player.choice)));
+      console.log('reveal inside slice', reveal)
+
+      if (reveal) {
+        const selfChoice = roomData.players[state.character].choice;
+
+        const sameChoicePlayers = Object.values(roomData.players)
+          .filter((player) => player.choice === selfChoice)
+          .length;
+
+        const majorityRate = (sameChoicePlayers / totalPlayers);
+
+        majorityRate === 0.5
+          ? roomData.players[state.character].numOfLives += 0
+          : majorityRate > 0.5
+            ? roomData.players[state.character].numOfLives += 1
+            : roomData.players[state.character].numOfLives -= 1;
+
+        Object.values(roomData.players).forEach((player) => player.choice = '');
+        await setDoc(roomDoc, roomData);
+      }
+
+      return {
+        start: roomData.start,
+        players: roomData.players,
+        reveal
+      };
+
+    } catch (err) {
+      console.error(err);
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+
 const roomSlice = createSlice({
   name: 'room',
   initialState,
-  reducers: {
-    updateLocalState: (state, action: PayloadAction<DatabaseState>) => {
-      state.players = action.payload.players;
-      state.start = action.payload.start;
-
-      console.log(state.players);
-
-      if (Object.values(state.players).every((player) => (!player.playerName) || (player.choice))) {
-        state.reveal = true;
-      } else {
-        state.reveal = false
-      };
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(
       createRoom.fulfilled,
@@ -236,13 +276,20 @@ const roomSlice = createSlice({
       (state, action) => {
         state.character = action.payload;
       }
+    ).addCase(
+      recalculateLives.fulfilled,
+      (state, action) => {
+        state.start = action.payload.start;
+        state.players = action.payload.players;
+        state.reveal = action.payload.reveal;
+      }
     );
   }
 });
 
-export const {
-  updateLocalState
-} = roomSlice.actions;
+// export const {
+
+// } = roomSlice.actions;
 export default roomSlice.reducer;
 
 

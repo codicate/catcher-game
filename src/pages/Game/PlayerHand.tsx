@@ -7,17 +7,14 @@ import Card from 'pages/Game/Card';
 const PlayerHand = ({
   character,
   player,
-  lives,
   choice,
   reveal
 }: {
   character: string;
   player: Player;
-  lives: number;
   choice?: string;
   reveal: boolean;
 }) => {
-  console.log('reveal', reveal);
   return (
     <div className={styles.playerHand}>
       <div className={styles.avatar}>
@@ -30,7 +27,7 @@ const PlayerHand = ({
         </div>
         <div className={styles.lives}>
           {
-            [...Array(lives)].map((_, idx) => (
+            [...Array(player.numOfLives)].map((_, idx) => (
               <div key={idx} />
             ))
           }
