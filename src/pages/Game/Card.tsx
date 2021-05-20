@@ -4,7 +4,7 @@ const Card = ({
   text, type, onClick
 }: {
   text: string;
-  type: 'question' | 'choiceA' | 'choiceB' | 'choiceA small' | 'choiceB small';
+  type: string;
   onClick?: () => void;
 }) => {
   return (

@@ -11,14 +11,14 @@ export enum Characters { Holden, Phoebe, Sally, Jane, Ackley, Stradlater, Allie,
 export interface Player {
   playerName: string,
   status: Status,
-  choice: string,
+  choice: { letter: string, text: string; },
   numOfLives: number;
 }
 
 const player = {
   playerName: '',
   status: Status.alive,
-  choice: '',
+  choice: { letter: '', text: '' },
   numOfLives: 3
 };
 
@@ -65,7 +65,8 @@ export const createRoom = createAsyncThunk(
         roomId,
         roomName: input.roomName || `Room ${roomId}`,
       },
-      players: initialState.players
+      players: initialState.players,
+      start: false
     };
 
     try {
@@ -175,7 +176,7 @@ export const startGame = createAsyncThunk(
 
 export const makeChoice = createAsyncThunk(
   'room/makeChoice',
-  async (choice: string, { getState, rejectWithValue }) => {
+  async (choice: { letter: string, text: string; }, { getState, rejectWithValue }) => {
     const state = (getState() as RootState).room;
 
     try {
@@ -207,23 +208,26 @@ export const recalculateLives = createAsyncThunk(
       const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
       const roomSnapshot = await getDoc(roomDoc);
       const roomData = roomSnapshot.data() as DatabaseState;
-      console.log('bru', roomData)
+      console.log('bru', roomData);
 
       const totalPlayers = Object.values(roomData.players)
         .filter((player) => player.playerName)
         .length;
 
-      const reveal = (roomData.start) && (Object.values(roomData.players).every((player) => (!player.playerName) || (player.choice)));
-      console.log('reveal inside slice', reveal)
+      const lastReveal = state.reveal;
+      const reveal = (roomData.start) && (Object.values(roomData.players).every((player) => (!player.playerName) || (player.choice.text)));
+      console.log('last reveal inside slice', lastReveal);
+      console.log('reveal inside slice', reveal);
 
-      if (reveal) {
+      if (reveal !== lastReveal) {
         const selfChoice = roomData.players[state.character].choice;
 
         const sameChoicePlayers = Object.values(roomData.players)
-          .filter((player) => player.choice === selfChoice)
+          .filter((player) => player.choice.text === selfChoice.text)
           .length;
 
         const majorityRate = (sameChoicePlayers / totalPlayers);
+        console.log(majorityRate);
 
         majorityRate === 0.5
           ? roomData.players[state.character].numOfLives += 0
@@ -231,7 +235,7 @@ export const recalculateLives = createAsyncThunk(
             ? roomData.players[state.character].numOfLives += 1
             : roomData.players[state.character].numOfLives -= 1;
 
-        Object.values(roomData.players).forEach((player) => player.choice = '');
+        // Object.values(roomData.players).forEach((player) => player.choice = '');
         await setDoc(roomDoc, roomData);
       }
 

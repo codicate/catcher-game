@@ -12,7 +12,7 @@ const PlayerHand = ({
 }: {
   character: string;
   player: Player;
-  choice?: string;
+  choice?: { letter: string, text: string; };
   reveal: boolean;
 }) => {
   return (
@@ -33,11 +33,12 @@ const PlayerHand = ({
           }
         </div>
       </div>
-      {choice && (
+      {console.log('letter', choice)}
+      {choice?.text && (
         reveal ? (
           <Card
-            type='choiceA small'
-            text={choice}
+            type={`choice${choice.letter.toUpperCase()} small`}
+            text={choice.text}
           />
         ) : (
           <div className={styles.backOfCard} />

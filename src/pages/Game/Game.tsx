@@ -58,14 +58,14 @@ const Game = () => {
             type='choiceA'
             text={cards[0].choices.a}
             onClick={() => {
-              !reveal && dispatch(makeChoice(cards[0].choices.a));
+              !reveal && dispatch(makeChoice({ letter: 'a', text: cards[0].choices.a }));
             }}
           />
           <Card
             type='choiceB'
             text={cards[0].choices.b}
             onClick={() => {
-              !reveal && dispatch(makeChoice(cards[0].choices.b));
+              !reveal && dispatch(makeChoice({ letter: 'b', text: cards[0].choices.b }));
             }}
           />
         </div>
