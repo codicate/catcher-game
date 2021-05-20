@@ -2,18 +2,12 @@ import { RootState } from 'app/store';
 import { createSlice, createDraftSafeSelector, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 import { firestore } from 'utils/firebase';
-import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 
 export enum Status { dead, alive }
 export enum Characters { Holden, Phoebe, Sally, Jane, Ackley, Stradlater, Allie, DB }
 
-export interface Player {
-  playerName: string,
-  status: Status,
-  choice: { letter: string, text: string; },
-  numOfLives: number;
-}
 
 const player = {
   playerName: '',
@@ -21,6 +15,8 @@ const player = {
   choice: { letter: '', text: '' },
   numOfLives: 3
 };
+
+export type Player = typeof player;
 
 const initialState = {
   roomInfo: {
@@ -39,11 +35,12 @@ const initialState = {
     creator: true,
   },
   character: '',
+  hide: true,
   reveal: false
 };
 
 export type LocalState = typeof initialState;
-export type DatabaseState = Omit<typeof initialState, 'self' | 'character' | 'reveal'>;
+export type DatabaseState = Omit<typeof initialState, 'self' | 'character'>;
 
 
 const getCodeFromDate = (numOfDigit: number) => {
@@ -63,10 +60,10 @@ export const createRoom = createAsyncThunk(
     const roomData = {
       roomInfo: {
         roomId,
-        roomName: input.roomName || `Room ${roomId}`,
+        roomName: input.roomName || `Room ${roomId}`
       },
       players: initialState.players,
-      start: false
+      start: false,
     };
 
     try {
@@ -186,6 +183,50 @@ export const makeChoice = createAsyncThunk(
       if (roomSnapshot.exists()) {
         const roomData = roomSnapshot.data() as DatabaseState;
         state.character && (roomData.players[state.character].choice = choice);
+
+        const reveal = Object.values(roomData.players).every((player) => (!player.playerName) || (player.choice.text));
+        console.log('reveal inside slice', reveal);
+
+        if (reveal) {
+          roomData.hide = false;
+          roomData.reveal = false;
+          console.log('bru', roomData.players[state.character].playerName, roomData.players[state.character].numOfLives);
+
+          const totalPlayers = Object.values(roomData.players)
+            .filter((player) => player.playerName)
+            .length;
+
+          roomData.players = Object.fromEntries(
+            Object.entries(roomData.players).map(([character, player]) => {
+              const sameChoicePlayers = Object.values(roomData.players)
+                .filter((otherPlayer) => otherPlayer.choice.text === player.choice.text)
+                .length;
+              const majorityRate = (sameChoicePlayers / totalPlayers);
+
+              majorityRate === 0.5
+                ? player.numOfLives += 0
+                : majorityRate > 0.5
+                  ? player.numOfLives = state.players[state.character].numOfLives + 1
+                  : player.numOfLives = state.players[state.character].numOfLives - 1;
+
+              return [character, player];
+            })
+          );
+
+          setTimeout(async () => {
+            const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
+            const roomSnapshot = await getDoc(roomDoc);
+            const roomData = roomSnapshot.data() as DatabaseState;
+
+            roomData.players = Object.fromEntries(Object.entries(roomData.players).map(([character, player]) => {
+              player.choice = { letter: '', text: '' };
+              return [character, player];
+            }));
+            roomData.hide = true;
+            await setDoc(roomDoc, roomData);
+          }, 3000);
+        }
+
         await setDoc(roomDoc, roomData);
       }
 
@@ -199,64 +240,15 @@ export const makeChoice = createAsyncThunk(
 );
 
 
-export const recalculateLives = createAsyncThunk(
-  'room/recalculateLives',
-  async (_, { getState, rejectWithValue }) => {
-    const state = (getState() as RootState).room;
-
-    try {
-      const roomDoc = doc(firestore, 'rooms', state.roomInfo.roomId);
-      const roomSnapshot = await getDoc(roomDoc);
-      const roomData = roomSnapshot.data() as DatabaseState;
-      console.log('bru', roomData);
-
-      const totalPlayers = Object.values(roomData.players)
-        .filter((player) => player.playerName)
-        .length;
-
-      const lastReveal = state.reveal;
-      const reveal = (roomData.start) && (Object.values(roomData.players).every((player) => (!player.playerName) || (player.choice.text)));
-      console.log('last reveal inside slice', lastReveal);
-      console.log('reveal inside slice', reveal);
-
-      if (reveal !== lastReveal) {
-        const selfChoice = roomData.players[state.character].choice;
-
-        const sameChoicePlayers = Object.values(roomData.players)
-          .filter((player) => player.choice.text === selfChoice.text)
-          .length;
-
-        const majorityRate = (sameChoicePlayers / totalPlayers);
-        console.log(majorityRate);
-
-        majorityRate === 0.5
-          ? roomData.players[state.character].numOfLives += 0
-          : majorityRate > 0.5
-            ? roomData.players[state.character].numOfLives += 1
-            : roomData.players[state.character].numOfLives -= 1;
-
-        // Object.values(roomData.players).forEach((player) => player.choice = '');
-        await setDoc(roomDoc, roomData);
-      }
-
-      return {
-        start: roomData.start,
-        players: roomData.players,
-        reveal
-      };
-
-    } catch (err) {
-      console.error(err);
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
-
-
 const roomSlice = createSlice({
   name: 'room',
   initialState,
-  reducers: {},
+  reducers: {
+    updateLocalState: (state, action: PayloadAction<DatabaseState>) => {
+      state.players = action.payload.players;
+      state.start = action.payload.start;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(
       createRoom.fulfilled,
@@ -280,20 +272,13 @@ const roomSlice = createSlice({
       (state, action) => {
         state.character = action.payload;
       }
-    ).addCase(
-      recalculateLives.fulfilled,
-      (state, action) => {
-        state.start = action.payload.start;
-        state.players = action.payload.players;
-        state.reveal = action.payload.reveal;
-      }
     );
   }
 });
 
-// export const {
-
-// } = roomSlice.actions;
+export const {
+  updateLocalState
+} = roomSlice.actions;
 export default roomSlice.reducer;
 
 

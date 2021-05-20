@@ -14,11 +14,9 @@ import PlayerHand from 'pages/Game/PlayerHand';
 const Game = () => {
   const dispatch = useAppDispatch();
 
-  const { roomInfo, players, reveal } = useAppSelector(selectRoom);
+  const { roomInfo, players, reveal, hide } = useAppSelector(selectRoom);
 
   useFirebaseSyncState();
-
-  console.log('reveal', reveal);
 
   return (
     <div className={styles.game}>
@@ -33,7 +31,7 @@ const Game = () => {
                 character={character}
                 player={player}
                 choice={player.choice}
-                reveal={reveal}
+                hide={hide}
               />
             )
         }
