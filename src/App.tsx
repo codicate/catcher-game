@@ -2,7 +2,6 @@
 import 'App.scss';
 import { Switch, Route } from "react-router-dom";
 
-import Header from 'pages/Header/Header';
 import Homepage from 'pages/Homepage/Homepage';
 import JoinRoom from 'pages/JoinRoom/JoinRoom';
 import CreateRoom from 'pages/CreateRoom/CreateRoom';
@@ -30,6 +29,7 @@ function App() {
           <Game />
         </Route>
       </Switch>
+      <div className='gameInfo'>About the Game</div>
     </>
   );
 }

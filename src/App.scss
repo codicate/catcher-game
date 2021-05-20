@@ -9,7 +9,7 @@
 }
 
 #root {
-  &>:last-child {
+  &>:first-child {
     height: fit-content;
     width: fit-content;
     min-height: 100vh;
@@ -23,4 +23,38 @@ button {
 
   text-decoration: none;
   cursor: pointer;
+}
+
+.gameInfo {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+
+  padding: .75em 1.5em;
+
+  border: none;
+  border-radius: 1em;
+  background: hsl(0, 0%, 10%);
+
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+
+  &:hover::after {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+
+    max-width: 70ch;
+    padding: 2em;
+
+    font-weight: 400;
+    line-height: 1.75em;
+
+    white-space: pre-wrap;
+    border-radius: 1em;
+    background: hsl(0, 0%, 10%);
+
+    content: 'Group #2 | Henry Liu | Catcher in the Rye Board Game\A\AThe enduring understanding of the game is "Individual values may be similar or different to cultural or societal values".\A\AThe game relate to the theme, as each player gain or lose score depending on if their choice is the majority of all the players playing the game.\A\AThe game will give you random scenarios that Holden faced throughout the novel, and the player must choose a choice that either they feel is right. However, you only gain points when your choice is the majority, regardless of if your choice is ethnically correct or not.\A\AThe game can be interpreted as a psychological game where the winner will be the person who can correctly predict how other people will approach a situation and win all the scores, or a personality test where the winner will be the person with the most unique way to approach a situation and lose all of the score the fastest.\A\AThrough playing the game with my friend, I noticed how people initially discussed why they chose their choice with personal experiences, but later began to solely focus on choosing the choice they presume to be the majority. The majority choice is usually the “safest” or the most ethnically correct choice. I can correlate this observation to the enduring understanding of how when people are forced to fit in, they tend to choose the safest option without trying to be unique.\A\ALastly, I realized that the game would be a lot more interesting to play with more people and more choices per question. People may begin to form factions with others who share a similar view. However, that would be hard to accomplish.';
+  }
 }
