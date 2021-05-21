@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/catcher-game/static/css/main.d849b89e.chunk.css",
-    "main.js": "/catcher-game/static/js/main.b0142f4a.chunk.js",
-    "main.js.map": "/catcher-game/static/js/main.b0142f4a.chunk.js.map",
+    "main.js": "/catcher-game/static/js/main.6f936214.chunk.js",
+    "main.js.map": "/catcher-game/static/js/main.6f936214.chunk.js.map",
     "runtime-main.js": "/catcher-game/static/js/runtime-main.1281cddd.js",
     "runtime-main.js.map": "/catcher-game/static/js/runtime-main.1281cddd.js.map",
     "static/js/2.b48bb0c4.chunk.js": "/catcher-game/static/js/2.b48bb0c4.chunk.js",
@@ -23,6 +23,6 @@
     "static/js/runtime-main.1281cddd.js",
     "static/js/2.b48bb0c4.chunk.js",
     "static/css/main.d849b89e.chunk.css",
-    "static/js/main.b0142f4a.chunk.js"
+    "static/js/main.6f936214.chunk.js"
   ]
 }
