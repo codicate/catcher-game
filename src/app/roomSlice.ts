@@ -197,6 +197,7 @@ const nextRound = createAsyncThunk(
       }
     })();
 
+    console.log('questionIdx in Slice', roomData.questionIdx);
     roomData.reveal = false;
     roomData.hide = true;
 
@@ -269,6 +270,9 @@ const roomSlice = createSlice({
     updateLocalState: (state, action: PayloadAction<DatabaseState>) => {
       state.players = action.payload.players;
       state.start = action.payload.start;
+      state.reveal = action.payload.reveal;
+      state.hide = action.payload.hide;
+      state.questionIdx = action.payload.questionIdx;
     }
   },
   extraReducers: (builder) => {
@@ -294,21 +298,7 @@ const roomSlice = createSlice({
       (state, action) => {
         state.character = action.payload;
       }
-    ).addCase(
-      makeChoice.fulfilled,
-      (state, action) => {
-        state.players = action.payload.players;
-        state.reveal = action.payload.reveal;
-        state.hide = action.payload.hide;
-      }
-    ).addCase(
-      nextRound.fulfilled,
-      (state, action) => {
-        state.hide = action.payload.hide;
-        state.reveal = action.payload.reveal;
-        state.questionIdx = action.payload.questionIdx;
-      }
-    );
+    )
   }
 });
 

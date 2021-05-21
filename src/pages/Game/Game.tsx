@@ -14,6 +14,7 @@ import PlayerHand from 'pages/Game/PlayerHand';
 const Game = () => {
   const dispatch = useAppDispatch();
   const { roomInfo, players, reveal, hide, questionIdx } = useAppSelector(selectRoom);
+  console.log('questionIdx', questionIdx);
   useFirebaseSyncState();
 
   return (
